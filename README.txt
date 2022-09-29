@@ -2,7 +2,7 @@ Software Requirements:
     Python - https://www.python.org/downloads/
     Visual Studio Code - https://code.visualstudio.com/
     GitHub Desktop - https://desktop.github.com/
-    MySQL Workbench - https://dev.mysql.com/downloads/workbench/
+    MySQL + MySQL Server + MySQL Shell + MySQL Workbench (v 8.0.30) - https://dev.mysql.com/downloads/installer/
 
 Extension Requirements:
     Better Jinja
@@ -12,6 +12,7 @@ Open a terminal with ctrl + `, and type "pip install package_name" to install th
     flask
     flask-login
     sqlalchemy
+    pymysql
 
 
 
