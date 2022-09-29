@@ -1,0 +1,17 @@
+def create_an_account(
+            self,
+            first_name=None,
+            login_email=None,
+            country_name=None,
+            city_name=None,
+            postcode=None,
+            last_name=None):
+        api_request = APIRequest('CreateAnAccount', 'GET', 'https', 'RPC', 'query')
+        api_request._params = {
+            "FirstName": first_name,
+            "LoginEmail": login_email,
+            "CountryName": province_name,
+            "CityName": city_name,
+            "Postcode": postcode,
+            "LastName": last_name}
+        return self._handle_request(api_request).result 
