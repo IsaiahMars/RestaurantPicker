@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS Links -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="../static/css/base.css">
+
+    <title> {% block title %} Title {% endblock %} </title>
+</head>
+<body>
+    
+  <div class="navbar-nav"> <!-- Bootstrap CSS navbar, based on examples provided here: https://getbootstrap.com/docs/4.0/components/navbar/ -->
+    <ul class="nav">
+      <li class="nav-item mr-auto p2 links-menu">
+        <div class="dropdown">
+          <button class="btn btn-md btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img src="../static/resources/icons8-menu.svg" alt="Menu"> <!--Hamburger menu SVG provided by Icons8: https://icons8.com/icons/set/menu -->
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="/"> Home </a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item p2 account-menu">
+        <div class="dropdown">
+          <button class="btn btn-md btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Account
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          {% if user.is_authenticated %}                                            <!-- Jinja statement templates used to check if a user is logged in, this works thanks   -->
+            <a class="dropdown-item" href="/account-settings"> Settings </a>        <!-- to UserMixin and because 'user=current_user' is passed in every route our navbar is -->
+            <a class="dropdown-item" href="/logout"> Sign Out </a>                  <!-- extended by. This if/else statement simply changes the links contained within the   -->
+          {% else %}                                                                <!-- navbar dropdowns based on whether a user is logged in or not.                       -->
+            <a class="dropdown-item" href="/login"> Log In </a>
+            <a class="dropdown-item" href="/sign-up"> Sign Up </a>
+          {% endif %}
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}                    <!-- More Jinja statement templates, these statements check to see if the 'flash()'   -->
+      {% if messages %}                                                                 <!-- function has been called, gathers the associated messages into a list, and then  -->
+        {% for category, message in messages%}                                          <!-- displays them as Bootstrap CSS divs directly below the navbar. The color of the  -->
+          {% if category == 'error' %}                                                  <!-- message that gets flashed is determined by its assigned category, as well as the -->
+          <div class="alert alert-danger alert-dismissable fade show" role="alert">     <!-- Bootstrap classes 'alert-danger' and 'alert-success'.                            -->
+            {{ message }}                                                               <!-- NOT ORIGINALLY OUR CODE - This code was provided by the YouTube channel named    -->
+            <button type="button" class="close" data-dismiss="alert">                   <!-- 'Tech With Tim', during his flask tutorial at this timestamp provided below:     -->
+              <span aria-hidden="true" >&times;</span>                                  <!-- https://youtu.be/dam0GPOAvVI?t=3799                                              -->
+            </button>
+          </div>
+          {% else %}
+          <div class="alert alert-success alert-dismissable fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert">
+              <span aria-hidden="true" >&times;</span>
+            </button>
+          </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %} 
+    {% endblock %}
+
+
+
+    <!-- Bootstrap CSS Scripts -->
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    
+</body>
+</html>

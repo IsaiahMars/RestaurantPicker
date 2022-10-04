@@ -1,0 +1,82 @@
+
+/*  CSS FOR NAVBAR */
+.navbar-nav{
+    padding: 1em; 
+    background-color: #8a111f;
+}
+
+.navbar-nav .account-menu{
+    padding-top: .5em;
+}
+
+/*  CSS FOR NAVBAR */
+
+/*  CSS FOR SIGN UP PAGE */
+.sign-up-form {
+    width: 500px;
+    height: 550px;
+    margin: 1em auto;
+    border: 2px solid black;
+}
+
+.sign-up-form h2 {
+    width: fit-content;
+    margin: 1em auto;
+}
+
+.sign-up-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.sign-up-form .form-item{
+    display: flex;
+    flex-direction: column;
+    margin: .5em auto;
+    font-size: 18px;
+}
+
+.sign-up-form input {
+    width: 400px;
+}
+
+.sign-up-form button {
+    width: 100px;
+    margin: auto;
+}
+/*  CSS FOR SIGN UP PAGE */
+
+/*  CSS FOR LOGIN PAGE */
+.login-form {
+    width: 500px;
+    height: 350px;
+    margin: 1em auto;
+    border: 2px solid black;
+}
+
+.login-form h2 {
+    width: fit-content;
+    margin: 1em auto;
+}
+
+.login-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form .form-item{
+    display: flex;
+    flex-direction: column;
+    margin: .5em auto;
+    font-size: 18px;
+}
+
+.login-form input {
+    width: 400px;
+}
+
+.login-form button {
+    width: 100px;
+    margin: auto;
+}
+/*  CSS FOR LOGIN PAGE */

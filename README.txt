@@ -13,6 +13,7 @@ Open a terminal with ctrl + `, and type "pip install package_name" to install th
     flask-login
     sqlalchemy
     pymysql
+    cryptography
 
 
 
