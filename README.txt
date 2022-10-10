@@ -11,6 +11,7 @@ Package Requirements:
 Open a terminal with ctrl + `, and type "pip install package_name" to install the following:
     flask
     flask-login
+    flask_sqlalchemy
     sqlalchemy
     pymysql
     cryptography

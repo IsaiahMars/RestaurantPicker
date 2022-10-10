@@ -3,7 +3,7 @@ from app import createApp
 app = createApp()
 
 if __name__ == "__main__":
-    app.run(debug=True, port=4000)
+    app.run(debug=True, port=4269)
 
 
 # This is the file used to run our website. In visual studio code,
