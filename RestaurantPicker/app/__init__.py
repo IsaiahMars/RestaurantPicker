@@ -6,10 +6,10 @@ from sqlalchemy_utils.functions import database_exists
 
 
 db = SQLAlchemy()                  # Creating the SQLAlchemy class object used to integrate our database into our project
-DB_NAME = 'restaurantpickerdb'     # Currently, this project requires you to have an existing database hosted locally on your PC.
+DB_NAME = 'restaurantpicker'     # Currently, this project requires you to have an existing database hosted locally on your PC.
 DB_ADDRESS = '127.0.0.1'           # You must replace these variables here with the information of said database to establish a connection.
 DB_USER = 'root'
-DB_PASSWORD = 'steamyhams123'
+DB_PASSWORD = 'Magicmonkey6'
 
 
 def createApp():
@@ -41,4 +41,5 @@ def createApp():
 
 def createDatabase(app):
     if database_exists(app.config['SQLALCHEMY_DATABASE_URI']):   # Checks to see if the database exists, and creates the tables within our database that are required by our project
-        db.create_all(app=app)
+        with app.app_context():
+            db.create_all()
