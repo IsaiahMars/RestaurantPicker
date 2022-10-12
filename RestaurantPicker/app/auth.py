@@ -73,16 +73,15 @@ def signUp():
             db.session.commit()                                                     # Creating a new object within our database, storing a user's password as its hashed value for security.
 
             flash('Account created!', category="success")
-            login_user(new_user, remember=True)
+            login_user(new_user, remember=False)
             return redirect(url_for("views.home"))                                  # Flashing a message, logging in the user, redirecting to homepage upon successful account creation.
-
-
 
     return render_template("sign-up.html", user=current_user)
 
         
 
 @auth.route('/account-settings', methods=["GET", "POST"])
+@login_required
 def account():
     if request.method == 'POST':
         if 'update-profile-picture' in request.form:                                        # If statements to check which form was submitted.  
@@ -141,7 +140,25 @@ def account():
                 return render_template("account.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
             
         if 'update-password' in request.form:
-            pass
+            newPassword1 = request.form.get('new-password1')
+            newPassword2 = request.form.get('new-password2')
+            currentPassword = request.form.get('current-password')
+
+            if newPassword1 != newPassword2:                                               
+                flash('Passwords do not match!', category='error')
+            elif newPassword1 == currentPassword:
+                flash('New password matches current password!', category='error')
+            elif len(newPassword1) < 8:
+                flash('Password must be at least 7 characters.', category='error')
+            elif not check_password_hash(current_user.password, currentPassword):
+                flash("'Current' password entered does not match current password!", category='error')
+            else:
+                user = User.query.filter_by(id=current_user.id).first()
+                user.password = generate_password_hash(newPassword1, method="sha256")
+                db.session.commit()
+
+                flash('Password updated successfully!', category='success')
+                return render_template("account.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
 
         if 'update-theme' in request.form:
             primaryColor = request.form.get('primary-color')    
@@ -158,12 +175,11 @@ def account():
     return render_template("account.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
 
 @auth.route('/logout')
+@login_required
 def logout():
     flash('Logged out successfully!', category='success')
     logout_user()                                                                    # Logging out the current user, flashing a message, and redirecting to login page.
     return redirect(url_for("auth.login"))
-
-
 
 
 ###################################

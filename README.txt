@@ -7,14 +7,16 @@ Software Requirements:
 Extension Requirements:
     Better Jinja
 
-Package Requirements:
-Open a terminal with ctrl + `, and type "pip install package_name" to install the following:
+Module Requirements:
+In Visual Studio Code, open a terminal with ctrl + `, and type "pip install package_name" to install the following:
     flask
     flask-login
     flask_sqlalchemy
+    sqlalchemy-utils
     sqlalchemy
     pymysql
     cryptography
+    azure-storage-blob
 
 
 
