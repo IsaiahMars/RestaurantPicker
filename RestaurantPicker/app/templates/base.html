@@ -43,9 +43,9 @@
       <li class="nav-item p2 account-menu">
         <div class="account-image">
           {% if user.is_authenticated and user.userImage == "default"%}
-            <img src="../static/resources/blank_user.jpg" alt="User">
+            <img src="../static/resources/blank_user.jpg" alt="User" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}">
           {% elif user.is_authenticated %}
-            <img src="{{ userImageURL }}" alt="User">
+            <img src="{{ userImageURL }}" alt="User" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}">
           {% else %}
             <img src="../static/resources/blank_user.jpg" alt="User">
           {% endif %}

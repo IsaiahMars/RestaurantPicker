@@ -16,7 +16,7 @@
         <div class="form-item">                                                                        
             <label for="user-image"> Profile Picture: </label>
             <div class="form-item-file-input">
-                <label class="user-image-input" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}">
+                <label class="user-image-input" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}; box-shadow: #595959 2px 1.5px;">
                     Select a File
                     <input type="file" id="user-image" name="user-image" >
                 </label>
@@ -47,7 +47,7 @@
         <div class="form-item">
             <label for="password"> Password: </label>
             <div class="form-item-input">
-                <button type="button" id="passwordModal" class="btn btn-primary text-white" data-toggle="modal" data-target="#exampleModalCenter" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}"> Change Password </button>
+                <button type="button" id="passwordModal" class="btn btn-primary text-white" data-toggle="modal" data-target="#exampleModalCenter" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}; box-shadow: #595959 2px 1.5px;"> Change Password </button>
             </div>
         </div>
     </form>
