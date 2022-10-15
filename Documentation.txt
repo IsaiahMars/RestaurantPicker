@@ -1,0 +1,8 @@
+"Logged in successfully" - Maybe this could be on a timer rather than needing to press "x" to get it off of the screen 
+Changing Profile Picture - Everything was successful 
+Changing Username - successful but would make the picture lag out for a second
+Password - You can change your password but it doesnt actually store the new password
+log out button is successful
+Menu Button - successfully redirects to the home page when clicking home
+Account Setting - redirects successfully to the account information page
+Theme Setting - Successfully allows for the selection of a primary and secondary color

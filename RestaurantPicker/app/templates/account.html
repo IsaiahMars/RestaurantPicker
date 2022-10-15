@@ -1,0 +1,115 @@
+{% extends "base.html" %} {% block title %} Account Settings {% endblock%}
+
+{% block content%}
+<div class="user-image"> <!-- Jinja statement template used to check whether or not a user is logged in and has a profile picture in order to display the appropriate image. -->
+    {% if user.is_authenticated and user.userImage == "default"%}
+        <img src="../static/resources/blank_user.jpg" alt="User">
+    {% elif user.is_authenticated %}
+        <img src="{{ userImageURL }}"alt="User">
+    {% else %}
+        <img src="../static/resources/blank_user.jpg" alt="User">
+    {% endif %}
+</div>
+<div class="account-settings-form"> 
+    <h2> Account Info </h2>
+    <form method="POST" enctype="multipart/form-data">      <!-- The rest of these are just basic HTML forms used to edit user information. -->
+        <div class="form-item">                                                                        
+            <label for="user-image"> Profile Picture: </label>
+            <div class="form-item-file-input">
+                <label class="user-image-input" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}; box-shadow: #595959 2px 1.5px;">
+                    Select a File
+                    <input type="file" id="user-image" name="user-image" >
+                </label>
+                <button type="submit" name="update-profile-picture" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}"> Upload </button>
+            </div>
+        </div>
+    </form>
+    <form method="POST">
+        <div class="form-item">
+            <label for="username"> Username: </label>
+            <div class="form-item-input">
+                <input type="text" id="username" name="username" placeholder="{{ user.username }}">
+                <button type="submit" name="update-username" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}"> Apply </button>
+            </div>
+        </div>
+    </form>
+    <form method="POST">
+        <div class="form-item">
+            <label for="email"> Email Address: </label>
+            <div class="form-item-input">
+                <input type="email" id="email" name="email" placeholder="{{ user.email }}">
+                <button type="submit" name="update-email" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}"> Apply </button>
+            </div>
+            
+        </div>
+    </form>
+    <form>
+        <div class="form-item">
+            <label for="password"> Password: </label>
+            <div class="form-item-input">
+                <button type="button" id="passwordModal" class="btn btn-primary text-white" data-toggle="modal" data-target="#exampleModalCenter" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}; box-shadow: #595959 2px 1.5px;"> Change Password </button>
+            </div>
+        </div>
+    </form>
+    <!-- Modal -->
+    <!-- https://getbootstrap.com/docs/4.0/components/modal/ -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle"> Change Password </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    <div class="form-item">
+                        <label for="current-password"> Current Password: </label>
+                        <div class="form-item-input">
+                            <input type="password" id="current-password" name="current-password" placeholder="*********">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label for="new-password1"> New Password: </label>
+                        <div class="form-item-input">
+                            <input type="password" id="new-password1" name="new-password1">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label for="new-password2"> Confirm New Password: </label>
+                        <div class="form-item-input">
+                            <input type="password" id="new-password2" name="new-password2">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="modal-footer">
+                        <button type="submit" name="update-password" class="btn btn-primary m-auto w-25" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}"> Apply </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>    
+</div>
+
+<div class="theme-settings-form">
+    <h2> Theme Settings </h2>
+    <form method="POST">
+        <div class="form-item">
+            <label for="primary-color"> Primary Color: </label>
+            <input type="color" id="primary-color" name="primary-color" value="{{ user.primaryColor }}">
+        </div>
+        <div class="form-item">
+            <label for="secondary-color"> Secondary Color: </label>
+            <input type="color" id="secondary-color" name="secondary-color" value="{{ user.secondaryColor }}">
+        </div>
+        
+        <br />
+
+        <button type="submit" name="update-theme" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}"> Apply </button>
+    </form>
+    
+</div>
+
+{% endblock %}
