@@ -1,0 +1,86 @@
+{% extends "base.html" %} {% block title %} Home {% endblock%}
+
+{% block content %}     <!-- Search bar used to define the location parameter used in our API request. -->
+    <div class="input-form">
+        <form method="POST">
+            <input type="text" id="location" name="location" placeholder="Enter a location here...">
+            <button type="submit"> Search </button>
+        </form>
+    </div>
+    {% if trendingBusinesses[0] %} <!-- Checking to see if there is an item in the trendingBusinesses list  -->
+        <h2 class="header"> Trending: </h2>
+        <div class="container">
+            <button class="leftButton" id="scrollUp" onclick="scrollUp('trendingBusinesses')"><img src="../static/resources/left.png"></button>
+            <ul id="trendingBusinesses">
+                {% for business in trendingBusinesses %} <!-- Looping through trendingBusinesses and displaying each -->
+                    <li><a href="/restaurant">           <!-- 'business' as a list item. -->
+                        <div class="business">                                          
+                            <h4> {{ business["name"] }} </h4>                           <!-- Each 'business' is a dictionary object, 'business' attributes can be accessed in our HTML by passing the lists of                               -->                 
+                            <div class="image">                                         <!-- businesses in our route, and then using Jinja template statements & expressions to iterate through the list and access the dictionary keys.     -->
+                                <img src='{{ business["image_url"] }}' alt="Image">
+                            </div>
+                            <h4> Categories: </h4>
+                            <div class="category">
+                                <span>
+                                {% for category in business["categories"] %}
+                                    {% if loop.last %}
+                                        {{ category["title"] }}.
+                                    {% else %}   
+                                        {{ category["title"] }},
+                                    {% endif %}
+                                {% endfor %}
+                                </span>
+                            </div>
+                            <p> Rating: {{ business["rating"] }}, out of {{ business["review_count"] }} reviews.</p>
+                        </div>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button class="rightButton" id="scrollDown" onclick="scrollDown('trendingBusinesses')"><img src="../static/resources/right.png" alt="Right"></button>
+        </div>
+        <br />
+    {% else %}
+        <div class="not-searched">
+            <h2> Enter a location above to get started! </h2>
+        </div>
+    {% endif %}
+        <br />
+    {% if allBusinesses[0] %}
+        <h2 class="header"> {%if allBusinesses|length == 50 %}          
+                            Top 50 results near '{{ location }}':
+                            {% else %}
+                            All {{ allBusinesses|length }} results near '{{ location }}':
+                            {%endif%}</h2>
+        <div class="container">
+            <button class="leftButton" id="scrollUp" onclick="scrollUp('allBusinesses')"><img src="../static/resources/left.png"></button>
+            <ul id="allBusinesses">
+                {% for business in allBusinesses %}
+                    <li>
+                        <div class="business">
+                            <h4> {{ business["name"] }} </h4>
+                            <div class="image">
+                                <img src='{{ business["image_url"] }}' alt="Image">
+                            </div>
+                            <h4> Categories: </h4>
+                            <div class="category">
+                                <span>
+                                {% for category in business["categories"] %}
+                                    {% if loop.last %}
+                                        {{ category["title"] }}.
+                                    {% else %}   
+                                        {{ category["title"] }},
+                                    {% endif %}
+                                {% endfor %}
+                                </span>
+                            </div>
+                            <p> Rating: {{ business["rating"] }}, out of {{ business["review_count"] }} reviews.</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button class="rightButton" id="scrollDown" onclick="scrollDown('allBusinesses')"><img src="../static/resources/right.png" alt="Right"></button>
+        </div>
+    {% endif %}
+
+{% endblock %}

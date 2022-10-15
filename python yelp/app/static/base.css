@@ -1,0 +1,153 @@
+*{
+    margin: 0;
+}
+
+.navbar {
+    width: 100%;
+    height: 60px;
+    background: black;
+}
+
+.navbar h1 {
+    color: white;
+    text-align: center;
+    margin: 0 auto;
+    padding-top: .4em;
+}
+/*  -------------------------------------  */
+
+.input-form {
+    margin: 1em auto;
+    width: 400px;
+    height: 50px;
+}
+
+.input-form form{
+    display: flex;
+    flex-direction: row;
+}
+
+.input-form form input {
+    margin-top: 8px;
+    width: 70%;
+    height: 30px;
+}
+
+.input-form form button {
+    margin-top: 8px;
+    padding-left: .2em;
+    width: 30%;
+}
+
+.not-searched {
+    margin: 2em auto;
+    text-align: center;
+}
+
+/*  -------------------------------------  */
+
+.header{
+    margin-left: 6em;
+    margin-bottom: .5em;
+}
+
+.container{
+    margin: 0 auto;
+    width: 80vw;
+    display: flex;
+    position: relative;
+    border: 1px solid black;
+}
+
+.container .leftButton {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 40%;
+    left: 0;
+    border: none;
+    background: rgba(1, 1, 1, 0);
+}
+
+.container .rightButton {
+    position: absolute;
+    margin: 0 1em;
+    width: 50px;
+    height: 50px;
+    top: 40%;
+    right: 0;
+    border: none;
+    background: rgba(1, 1, 1, 0);
+}
+
+.container button img {
+    width: 50px;
+    height: 50px;
+}
+
+
+
+ul {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+    list-style-type: none;
+}
+
+ul::-webkit-scrollbar{
+    display: none;
+}
+
+
+
+li {
+    display:inline;
+    padding-right: 1em;
+}
+
+li a {
+    text-decoration: none;
+    color: black;
+}
+
+.business {
+    margin: 1em auto;
+    border: 2px solid black;
+    width: 320px;
+    height: 320px;
+}
+
+.business h4 {
+    margin: 1em auto;
+    text-align: center;
+}
+
+.business p {
+    margin: 1em auto;
+    text-align: center;
+}
+
+.business .image {
+    width: 160px;
+    height: 160px;
+    margin:  0 auto;
+}
+
+.business .image img {
+    width: 160px;
+    height: 160px;
+    border: 2px solid black;
+}
+
+.business .category {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.business .category span {
+    margin: 0 auto;
+}
+
+/*  -------------------------------------  */
