@@ -17,18 +17,17 @@
       crossorigin="anonymous"
     />
 
-    <link rel="stylesheet" href="../static/css/base.css">
+    <link rel="stylesheet" href="../../../static/css/base.css">
     
     <title> {% block title %} Title {% endblock %} </title>
 </head>
-<body>
-    
+<body> 
   <div class="navbar-nav" style="background-color: {{ user.primaryColor }};"> <!-- Bootstrap CSS navbar, based on examples provided here: https://getbootstrap.com/docs/4.0/components/navbar/ -->
     <ul class="nav">
       <li class="nav-item mr-auto p2 links-menu">
         <div class="dropdown">
           <button class="btn btn-md btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }};">
-            <img src="../static/resources/icons8-menu.svg" alt="Menu"> <!--Hamburger menu SVG provided by Icons8: https://icons8.com/icons/set/menu -->
+            <img src="../../../static/resources/icons8-menu.svg" alt="Menu"> <!--Hamburger menu SVG provided by Icons8: https://icons8.com/icons/set/menu -->
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" href="/"> Home </a>
@@ -43,11 +42,11 @@
       <li class="nav-item p2 account-menu">
         <div class="account-image">
           {% if user.is_authenticated and user.userImage == "default"%}
-            <img src="../static/resources/blank_user.jpg" alt="User" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}">
+            <img src="../../../static/resources/blank_user.jpg" alt="User" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}">
           {% elif user.is_authenticated %}
             <img src="{{ userImageURL }}" alt="User" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}">
           {% else %}
-            <img src="../static/resources/blank_user.jpg" alt="User">
+            <img src="../../../static/resources/blank_user.jpg" alt="User">
           {% endif %}
         </div>
         <div class="dropdown">

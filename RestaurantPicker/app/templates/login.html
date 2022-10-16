@@ -12,15 +12,45 @@
                 <label for="password"> Password: </label>
                 <input type="password" id="password" name="password" placeholder="Enter password here...">
             </div>
-
+            <button type="button" id="forgotPasswordBtn" class="btn btn-primary text-white" data-toggle="modal" data-target="#forgotPasswordModalCenter" style="background-color:#8a111f; border:2px solid #1d1d1d;"> Forgot Password? </button>
             <br/>
 
-            <button type="submit"> Log In </button>
+            <button class="login-submit" name="login" type="submit"> Log In </button>
         </form>
     </div>
     <div class="sign-up-redirect">
         <h4> Don't have an account?</h4>
         <a href="/sign-up"> Create one here. </a>
     </div>
-    
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="forgotPasswordModalCenter" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="forgotPasswordModalTitle"> Password Recovery </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="forgot-password-modal-body">
+                <p> Enter your email below to be sent a recovery link: </p>
+                <p> Be sure to check your spam folder. </p>
+                <form method="POST">
+                    <div class="form-item">
+                        <div class="form-item-input">
+                            <input type="email" id="recovery-email" name="recovery-email" placeholder="Enter email here...">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="modal-footer">
+                        <button type="submit" name="password-recovery" class="btn btn-primary m-auto w-25" style="background-color: #8a111f; border:2px solid #1d1d1d;"> Send Email </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+     
 {% endblock %}

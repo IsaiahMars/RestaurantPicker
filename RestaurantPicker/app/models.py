@@ -1,6 +1,8 @@
 # This file is used to define the tables (as well as their relationships) used within our database.
 from . import db
 from flask_login import UserMixin
+import datetime
+
 
 
 
@@ -13,7 +15,13 @@ class User(db.Model, UserMixin):
     userImage = db.Column(db.String(256))
     primaryColor = db.Column(db.String(10))
     secondaryColor = db.Column(db.String(10))
-    
-    
+    tokens = db.relationship('Token')
 
+
+class Token(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    token = db.Column(db.String(256), unique=True)
+    email = db.Column(db.String(50))
+    time_created = db.Column(db.DateTime(timezone=True))
 

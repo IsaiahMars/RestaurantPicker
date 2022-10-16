@@ -5,11 +5,15 @@
 
 import os
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import login_user, login_required, logout_user, current_user, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from azure.storage.blob import BlobServiceClient
-from .models import User
-from . import db
+from flask_mail import Mail, Message
+import secrets #https://blog.miguelgrinberg.com/post/the-new-way-to-generate-secure-tokens-in-python
+import datetime
+from datetime import timedelta
+from .models import User, Token
+from . import db, mail
 
 auth = Blueprint('auth', __name__)
 
@@ -26,20 +30,38 @@ except Exception as e:                                                          
 @auth.route('/login', methods=['GET', 'POST'])                                  # Creating the url route for our login page and passing the methods used to access our database. 
 def login():                                                     
     if request.method == 'POST':
-        email = request.form.get('email')                                       # Gathering the data entered into the login form.
-        password = request.form.get('password')
-
-        user = User.query.filter_by(email=email).first()                        # Querying our User table to check if an account with this email exists within our database.
-
-        if user:
-            if check_password_hash(user.password, password):                    # Hashing the password entered and checking it against the hashed password stored within our database.
-                flash('Logged in successfully!', category='success')
-                login_user(user, remember=False)                                # Once authentication is successfull, flashes a message and redirects to homepage.
-                return redirect(url_for("views.home"))
+        if 'login' in request.form:
+            email = request.form.get('email')                                       # Gathering the data entered into the login form.
+            password = request.form.get('password')
+            user = User.query.filter_by(email=email).first()                        # Querying our User table to check if an account with this email exists within our database.
+            if user:
+                if check_password_hash(user.password, password):                    # Hashing the password entered and checking it against the hashed password stored within our database.
+                    flash('Logged in successfully!', category='success')
+                    login_user(user, remember=False)                                # Once authentication is successfull, flashes a message and redirects to homepage.
+                    return redirect(url_for("views.home"))
+                else:
+                    flash('Check your password and try again.', category='error')   
             else:
-                flash('Check your password and try again.', category='error')   
-        else:
-            flash('Account with this email does not exist', category='error')
+                flash('Account with this email does not exist.', category='error')
+
+        if 'password-recovery'  in request.form:                                          
+            recoveryEmail = request.form.get('recovery-email')                              # Retreiving the user email used in the recovery process, querying the User object
+            user = User.query.filter_by(email=recoveryEmail).first()                        # to check if it exists, and then retrieving and deleting all old tokens. Then, creating
+            if user:                                                                        # a unique 16 digit token, encrypting it, and storing it in the database for later purposes.
+                allTokens = Token.query.filter_by(user_id=user.id).all()                    # Lastly, constructing the recovery email to be sent and the link to be used in the process, 
+                for i in allTokens:                                                         # and then sending it the user.
+                    db.session.delete(i)
+
+                message = Message('Reset Password', sender='restaurantpicker123@gmail.com', recipients=[recoveryEmail])
+                tempToken = secrets.token_hex(8)
+                newToken = Token(user_id=user.id, token=generate_password_hash(tempToken, method="sha256"), email=recoveryEmail, time_created=datetime.utcnow())
+                db.session.add(newToken)
+                db.session.commit() 
+                message.body = "The following link will allow you to reset your password and access your account. This link will expire in 2 minutes, if a new recovery link is sent, or after you change your password. \n" + "http://127.0.0.1:4269" + url_for('auth.resetPassword', userId=user.id, token=tempToken) 
+                mail.send(message)
+                flash('Recovery link sent!', category='success') 
+            else:
+                flash('Account with this email does not exist.', category='error') 
 
     return render_template("login.html", user=current_user)
 
@@ -67,6 +89,8 @@ def signUp():
             flash('Passwords do not match!', category='error')
         elif len(password1) < 8:
             flash('Password must be at least 7 characters.', category='error')
+        elif len(password1) > 49:
+            flash('Password must be less than 50 characters.', category='error')
         else:
             new_user = User(email=email, username=username, password=generate_password_hash(password1, method="sha256"), bio="None.", userImage="default", primaryColor="#8a111f", secondaryColor="#7d7d7d")  
             db.session.add(new_user)
@@ -140,16 +164,18 @@ def account():
                 return render_template("account.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
             
         if 'update-password' in request.form:
-            newPassword1 = request.form.get('new-password1')
-            newPassword2 = request.form.get('new-password2')
-            currentPassword = request.form.get('current-password')
-
+            newPassword1 = request.form.get('new-password1')                                            # Retreiving the passwords entered into the modal, checking to see
+            newPassword2 = request.form.get('new-password2')                                            # if the new password is eligible to use, and making sure it doesn't match
+            currentPassword = request.form.get('current-password')                                      # the old password. Then, retrieving the User object to change its password,
+                                                                                                        # and commit the changes to the database.
             if newPassword1 != newPassword2:                                               
                 flash('Passwords do not match!', category='error')
             elif newPassword1 == currentPassword:
                 flash('New password matches current password!', category='error')
             elif len(newPassword1) < 8:
                 flash('Password must be at least 7 characters.', category='error')
+            elif len(newPassword1) > 49:
+                flash('Password must be less than 50 characters.', category='error')
             elif not check_password_hash(current_user.password, currentPassword):
                 flash("'Current' password entered does not match current password!", category='error')
             else:
@@ -172,7 +198,58 @@ def account():
             flash('Theme updated successfully!', category='success')
             return render_template("account.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
 
+        if 'delete-account' in request.form:
+            password = request.form.get('current-password')
+
+            if not check_password_hash(current_user.password, password):                        # Checking to see if the password entered into the modal matches current password,
+                flash("Password entered does not match current password!", category='error')    # then retrieving the user, deleting it, and committing the change to the database
+            else:                                                                               # before redirecting to the home page.
+                user = User.query.filter_by(id=current_user.id).first()
+                db.session.delete(user)
+                db.session.commit()
+
+                flash('Account deleted successfully!', category='success')
+                return redirect(url_for("views.home", user=current_user))
+
     return render_template("account.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
+
+@auth.route('/reset-password/<userId>/<token>', methods=['GET', 'POST'])    # Parametrized url, described here: https://stackoverflow.com/questions/35188540/get-a-variable-from-the-url-in-a-flask-route
+def resetPassword(userId, token):       
+    logout_user()                                                    
+    if request.method == 'POST':
+        newPassword = request.form.get('newPassword')
+        confirmPassword = request.form.get('confirmPassword')
+        queryUser = User.query.filter_by(id=userId).first()                                         # Retrieving the passwords entered into the form and querying the User object
+                                                                                                    # that is going to have its password changed. Followed by a series of conditionals
+        if newPassword != confirmPassword:                                                          # used to check if the new password is eligible to use.
+            flash('Passwords do not match!', category='error')
+        elif check_password_hash(queryUser.password, newPassword):
+            flash('New password matches current password!', category='error')
+        elif len(newPassword) < 8:
+            flash('Password must be at least 7 characters.', category='error')
+        elif len(newPassword) > 49:
+            flash('Password must be less than 50 characters.', category='error')
+        else:
+            allTokens = Token.query.filter_by(user_id=queryUser.id).all()                           # Retrieving all of the recovery tokens associated with a user, changing the user's password
+            queryUser.password = generate_password_hash(newPassword, method="sha256")               # and then deleting all of that user's recovery tokens before committing the change to the database.
+            for i in allTokens:
+                db.session.delete(i)
+            db.session.commit()
+
+            flash('Password updated successfully!', category='success')
+            return redirect(url_for("auth.login"))
+    
+    queryUser = User.query.filter_by(id=userId).first()                                             # Retreiving the user and latest token used in the password recovery process,
+    queryToken =Token.query.filter_by(user_id=queryUser.id).order_by(Token.id.desc()).first()       # checking to see if the token still exists and isn't expired, and then rendering
+    if queryUser and check_password_hash(queryToken.token, token):                                  # the appropriate HTML file based on these conditions.
+        currentTime = datetime.utcnow()
+        expiryTime = queryToken.time_created + timedelta(minutes=2)
+        if currentTime > expiryTime:
+            return render_template("recovery-error.html", user=current_user)
+        else:
+            return render_template("reset-password.html", user=current_user)
+    else:        
+        return render_template("recovery-error.html", user=current_user)
 
 @auth.route('/logout')
 @login_required

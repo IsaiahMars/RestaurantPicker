@@ -79,7 +79,7 @@
 /*  CSS FOR LOGIN PAGE   */
 .login-form {
     width: 500px;
-    height: 350px;
+    height: 400px;
     margin: 1em auto;
     border: 2px solid black;
     border-radius: .3em;
@@ -102,12 +102,14 @@
     font-size: 18px;
 }
 
+
 .login-form input {
     width: 400px;
 }
 
 .login-form button {
-    margin: auto;
+    display: block;
+    margin: 1em auto;
     width: 100px;
     border-radius: .2em;
     background-color: #8a111f;
@@ -127,6 +129,25 @@
     color: black;
     text-decoration: underline;
 }
+
+#forgotPasswordBtn{
+    display: block;
+    margin: 0 3em;
+    width: 134px;
+    padding: 1px;
+}
+
+.forgot-password-modal-body p {
+    text-align: center;
+    margin: 1em auto;
+}
+
+.forgot-password-modal-body .form-item input {
+    display: block;
+    width: 60%;
+    margin: 0 auto;
+}
+
 /*  CSS FOR LOGIN PAGE            */
 
 /*  CSS FOR ACCOUNT SETTINGS PAGE */
@@ -233,7 +254,7 @@
     color: black;
 }
 
-.modal-body .form-item {
+.password-modal-body .form-item {
     display: flex;
     flex-direction: column;
     margin: .3em 4em;
@@ -279,5 +300,90 @@
     width: 130px;
     border-radius: .2em;
     color: white;
+    padding: 3px;
 }
 /*  CSS FOR ACCOUNT SETTINGS PAGE */
+/* ------------------        */
+/* CSS FOR DELETE ACCOUNT MODAL    */
+.delete-account {
+    margin: 1em auto;
+    width: 140px;
+}
+
+.delete-account-modal-body p {
+    text-align: center;
+    margin: .5em auto;
+}
+
+.delete-account-modal-body .form-item {
+    display: flex;
+    width: 70%;
+    flex-direction: column;
+    margin: 2em auto;
+    margin-bottom: 1em;
+}
+
+.delete-account-modal-body .form-item #current-password {
+    font-size: 15px;
+    display: block;
+    width: 70%;
+    margin: 0 auto;
+}
+
+/* CSS FOR DELETE ACCOUNT MODAL    */
+/* ------------------              */
+/* CSS FOR PASSWORD RESET          */
+
+.password-reset-form {
+    width: 360px;
+    height: 360px;
+    margin: 1em auto;
+    border: 2px solid black;
+    border-radius: .3em;
+}
+
+.password-reset-form h2 {
+    width: fit-content;
+    margin: 1em auto;
+}
+
+.password-reset-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.password-reset-form .form-item{
+    display: flex;
+    flex-direction: column;
+    margin: .5em auto;
+    font-size: 18px;
+}
+
+.password-reset-form input {
+    width: 240px;
+}
+
+.password-reset-form button {
+    margin: auto;
+    width: 100px;
+    border-radius: .2em;
+    background-color: #8a111f;
+    color: white;
+}
+
+/* CSS FOR PASSWORD RESET */
+/* ------------------     */
+/* CSS FOR RECOVERY ERROR */
+
+.recovery-error{
+    width: 400px;
+    border: 2px solid black;
+    margin: .2em auto;
+}
+
+.recovery-error h3 {
+    text-align: center;
+    padding: 1em;
+    font-size: 20px;
+}
+/* CSS FOR RECOVERY ERROR */

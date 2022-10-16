@@ -16,11 +16,11 @@
         <div class="form-item">                                                                        
             <label for="user-image"> Profile Picture: </label>
             <div class="form-item-file-input">
-                <label class="user-image-input" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}; box-shadow: #595959 2px 1.5px;">
+                <label class="user-image-input" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}; box-shadow: #1c1c1c 2px 1.5px;">
                     Select a File
                     <input type="file" id="user-image" name="user-image" >
                 </label>
-                <button type="submit" name="update-profile-picture" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}"> Upload </button>
+                <button type="submit" name="update-profile-picture" style="background-color: {{ user.secondaryColor }}; border: none; box-shadow: #1c1c1c 2px 1.5px;"> Upload </button>
             </div>
         </div>
     </form>
@@ -29,7 +29,7 @@
             <label for="username"> Username: </label>
             <div class="form-item-input">
                 <input type="text" id="username" name="username" placeholder="{{ user.username }}">
-                <button type="submit" name="update-username" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}"> Apply </button>
+                <button type="submit" name="update-username" style="background-color: {{ user.secondaryColor }}; border: none; box-shadow: #1c1c1c 2px 1.5px;"> Apply </button>
             </div>
         </div>
     </form>
@@ -38,7 +38,7 @@
             <label for="email"> Email Address: </label>
             <div class="form-item-input">
                 <input type="email" id="email" name="email" placeholder="{{ user.email }}">
-                <button type="submit" name="update-email" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}"> Apply </button>
+                <button type="submit" name="update-email" style="background-color: {{ user.secondaryColor }}; border: none; box-shadow: #1c1c1c 2px 1.5px;"> Apply </button>
             </div>
             
         </div>
@@ -47,22 +47,22 @@
         <div class="form-item">
             <label for="password"> Password: </label>
             <div class="form-item-input">
-                <button type="button" id="passwordModal" class="btn btn-primary text-white" data-toggle="modal" data-target="#exampleModalCenter" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}; box-shadow: #595959 2px 1.5px;"> Change Password </button>
+                <button type="button" id="passwordModal" class="btn btn-primary text-white" data-toggle="modal" data-target="#passwordModalCenter" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}; box-shadow: #1c1c1c 2px 1.5px;"> Change Password </button>
             </div>
         </div>
     </form>
     <!-- Modal -->
     <!-- https://getbootstrap.com/docs/4.0/components/modal/ -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="passwordModalCenter" tabindex="-1" role="dialog" aria-labelledby="passwordModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle"> Change Password </h5>
+            <h5 class="modal-title" id="passwordModalTitle"> Change Password </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>
-            <div class="modal-body">
+            <div class="password-modal-body">
                 <form method="POST">
                     <div class="form-item">
                         <label for="current-password"> Current Password: </label>
@@ -107,9 +107,40 @@
         
         <br />
 
-        <button type="submit" name="update-theme" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}"> Apply </button>
+        <button type="submit" name="update-theme" style="background-color: {{ user.secondaryColor }}; border: none; box-shadow: #1c1c1c 2px 1.5px;"> Apply </button>
     </form>
-    
+</div>
+
+<div class="delete-account">
+    <button type="button" id="deleteAccountModalBtn" class="btn btn-primary text-white" data-toggle="modal" data-target="#deleteAccountModalCenter" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}; box-shadow: #1c1c1c 2px 1.5px;"> Delete Account </button>
+
+    <div class="modal fade" id="deleteAccountModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="deleteAccountModalTitle"> Confirm & Delete Account </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="delete-account-modal-body">
+                <p> Are you sure you want to delete your account? </p>
+                <p> Enter your password below and click 'Delete' to confirm.</p>
+                <form method="POST">
+                    <div class="form-item">
+                        <div class="form-item-input">
+                            <input type="password" id="current-password" name="current-password" placeholder="Enter password here...">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="modal-footer">
+                        <button type="submit" name="delete-account" class="btn btn-primary m-auto w-25" style="background-color: {{ user.secondaryColor }}; border-color: {{ user.secondaryColor }}"> Delete </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

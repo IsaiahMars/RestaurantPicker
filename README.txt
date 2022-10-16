@@ -17,6 +17,7 @@ In Visual Studio Code, open a terminal with ctrl + `, and type "pip install pack
     pymysql
     cryptography
     azure-storage-blob
+    flask-mail
 
 
 

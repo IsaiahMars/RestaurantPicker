@@ -1,8 +1,8 @@
 from flask import Flask
+from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from sqlalchemy_utils.functions import database_exists
-
 
 
 db = SQLAlchemy()                  # Creating the SQLAlchemy class object used to integrate our database into our project
@@ -11,6 +11,7 @@ DB_ADDRESS = '127.0.0.1'           # You must replace these variables here with 
 DB_USER = 'root'
 DB_PASSWORD = 'steamyhams123'
 
+mail = Mail()
 
 def createApp():
     app = Flask(__name__)       
@@ -18,6 +19,14 @@ def createApp():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_ADDRESS}/{DB_NAME}'       # 'pymysql' is injected into the uri here to allow us to access MySQL databases with SQLAlchemy code.
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False                                                            # Disabling 'Track Modifications' reduces significant overhead.
     db.init_app(app)
+
+    app.config['MAIL_SERVER']='smtp.gmail.com'                                  
+    app.config['MAIL_PORT'] = 465                                                   # Configuring flask-mail as per documentation requirements, linked below:
+    app.config['MAIL_USERNAME'] = 'restaurantpicker123@gmail.com'                   # https://pythonhosted.org/Flask-Mail/
+    app.config['MAIL_PASSWORD'] = 'cisxkmdvrnhubtui'
+    app.config['MAIL_USE_TLS'] = False
+    app.config['MAIL_USE_SSL'] = True
+    mail.init_app(app)
 
     from .views import views
     from .auth import auth
