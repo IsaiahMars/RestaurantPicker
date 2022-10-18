@@ -1,5 +1,28 @@
 {% extends "base.html" %} {% block title %} Restaurant {% endblock%}
 
 {% block content %}
-
+    <div class="restaurant-container">
+        <img src="{{ business['image_url'] }}" alt="Image">
+        <div class="restaurant-info">
+            <h3> {{ business["name"] }} </h3>
+            <div class="rating">
+                <p> {{ business["rating"] }}/5, out of {{ business["review_count"] }} reviews. </p>
+            </div>
+            <div class="categories">
+                {% for category in business["categories"] %}
+                    {% if loop.last %}
+                        <p> {{ category["title"] }}. </p>
+                    {% else %}
+                        <p> {{ category["title"] }}, </p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <a href="{{ business['url'] }}"> Link to website </a>
+            <div class="contact">
+                <p> Restaurant phone number: </p>
+                <p class="phone-number"> {{ business["display_phone"] }} </p>
+            </div>
+            
+        </div>
+    </div>
 {% endblock %}

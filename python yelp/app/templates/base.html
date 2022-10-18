@@ -4,19 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/base.css">
+    <link rel="stylesheet" href="../../static/base.css">
     <title> {% block title%} Title {% endblock%} </title>
 </head>
 <body>
-    <div class="navbar">       <!-- Simulated navbar -->
-        <h1> NAVBAR </h1>
+    <div class="navbar">
+        <h1><a href="/"> HOME </a></h1>
     </div>
 
     {% block content %}
     {% endblock %}
 
     <!-- scroll based on: https://css-tricks.com/how-to-make-an-unobtrusive-scroll-to-top-button/ -->
-    <!-- These are simple javascript functions that allow us to use buttons to scroll through our list of restaurants displayed on the home page. -->
     <script>
         function scrollDown(string) {
         var element = document.getElementById(string)
