@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request
+from flask_googlemaps import GoogleMaps, Map
 import requests
 import json
+from . import map
 
 views = Blueprint('views', __name__)
 
@@ -46,10 +48,30 @@ def restaurant(businessId):
         parsed = json.loads(response.text)
         print("parsed data ---------------- ", flush=True)
         print(parsed, flush=True)
-        return render_template("restaurant.html", id=businessId, business=parsed) 
+
+        restaurantMap = Map(
+        identifier="restaurantMap",
+        lat=parsed["coordinates"]["latitude"],
+        lng=parsed["coordinates"]["longitude"],
+        zoom=16,
+        markers=[
+          {
+             'icon': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+             'lat': parsed["coordinates"]["latitude"],
+             'lng': parsed["coordinates"]["longitude"],
+             'infobox': parsed["name"]
+          }
+        ],
+        maptype_control=False,
+        streetview_control=False,
+        zoom_control=False,
+        fullscreen_control=False
+        )
+
+        return render_template("restaurant.html", id=businessId, business=parsed, restaurantMap=restaurantMap) 
 
 
-
+# link to google maps api documentation & examples: https://pypi.org/project/flask-googlemaps/
 
 # link to tutorial: https://www.youtube.com/watch?v=oggMBtza80E
 # link to code source: https://github.com/areed1192/sigma_coding_youtube/blob/master/python/python-api/yelp-api/Yelp%20API%20-%20Other%20Search%20%26%20Categories.py

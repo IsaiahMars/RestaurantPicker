@@ -167,10 +167,29 @@ li a {
     flex-direction: row;
 }
 
-.restaurant-container img{
+.restaurant-container .leftSide{
+    display: flex;
+    flex-direction: column;
+}
+
+.restaurant-container .leftSide img{
     width: 35vw;
     height: 500px;
     margin: 1em;
+    margin-bottom: 0;
+    border: 2px solid black;
+}
+
+.restaurant-container .leftSide hr {
+    color: black;
+    margin: 1em;
+}
+
+.restaurant-container .leftSide #restaurantMap {
+    margin: 0 auto;
+    padding: 1em;
+    width: 33vw;
+    height: 300px;
     border: 2px solid black;
 }
 

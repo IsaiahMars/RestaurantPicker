@@ -1,8 +1,17 @@
 {% extends "base.html" %} {% block title %} Restaurant {% endblock%}
 
 {% block content %}
+<head>
+    {{ restaurantMap.js }}
+</head>
+<body>
     <div class="restaurant-container">
-        <img src="{{ business['image_url'] }}" alt="Image">
+        <div class="leftSide">
+            <img src="{{ business['image_url'] }}" alt="Image">
+            <hr />
+            {{ restaurantMap.html }}
+        </div>
+        
         <div class="restaurant-info">
             <h3> {{ business["name"] }} </h3>
             <div class="rating">
@@ -25,4 +34,5 @@
             
         </div>
     </div>
+</body>
 {% endblock %}
