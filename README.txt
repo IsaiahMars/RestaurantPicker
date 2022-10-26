@@ -20,7 +20,7 @@ In Visual Studio Code, open a terminal with ctrl + `, and type "pip install pack
     flask-mail
     requests
     simple-geoip
-    
+    flask-googlemaps
     
 
 

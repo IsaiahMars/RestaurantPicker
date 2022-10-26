@@ -1,15 +1,16 @@
 # This file will be used to create our other routes (randomizer page, map page, etc...)
 import requests, json
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, flash
 from flask_login import current_user, login_required
+from flask_googlemaps import Map
 from .auth import get_img_url_with_blob_sas_token
-from .models import Preferences
+from .models import Preferences, Reviews
 from . import db, simple_geoip
 
 views = Blueprint('views', __name__)
 
 # Definining the API Key, Search Type, and Header
-MY_API_KEY = 'YELP API KEY'
+MY_API_KEY = 'YOUR_API_KEY_HERE'
 BUSINESS_SEARCH = 'https://api.yelp.com/v3/businesses/search'
 BUSINESS_DETAILS = 'https://api.yelp.com/v3/businesses/'
 HEADERS = {'Authorization': 'bearer %s' % MY_API_KEY}
@@ -88,12 +89,117 @@ def questionnaire():
 def randomizer():
     return render_template("randomizer.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
 
-@views.route('/restaurant')
-def restaurant():
+@views.route('/restaurant/<businessId>', methods=["GET", "POST"]) # Parametrized URL's explained here: https://stackoverflow.com/questions/24892035/how-can-i-get-the-named-parameters-from-a-url-using-flask
+def restaurant(businessId):
     if current_user.is_authenticated:
-        return render_template("restaurant.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
+        PARAMETERS = {}                                                     # This is a different type of YelpAPI request which uses the 'Business Details' endpoint in order to retrieve data 
+        response = requests.get(url=BUSINESS_DETAILS + businessId,          # about a restaurant when the restaurant's anchor tag is clicked on from the home page.
+                                params=PARAMETERS, 
+                                headers=HEADERS)
+        parsed = json.loads(response.text)
+
+        restaurantMap = Map(                                                # This is a Google Map's element which is fed the longitude and latitude data from the 'Business Details' get request       
+        identifier="restaurantMap",                                         # in order to display a restaurant's location. 
+        lat=parsed["coordinates"]["latitude"],                              # Roughly based on the documentation, linked here: https://pypi.org/project/flask-googlemaps/
+        lng=parsed["coordinates"]["longitude"],
+        zoom=16,
+        markers=[
+          {
+             'icon': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+             'lat': parsed["coordinates"]["latitude"],
+             'lng': parsed["coordinates"]["longitude"],
+             'infobox': parsed["name"]
+          }
+        ],
+        maptype_control=False,                                              # Disabling certain Map UI elements in order to prevent clutter within a small window.
+        streetview_control=False,                                           
+        zoom_control=False,
+        fullscreen_control=False
+        )
+
+        allReviews = Reviews.query.filter_by(business_id=businessId).all()      # Retrieving all reviews that match this restaurant's businessId in order to display them on the page.
+        
+        if request.method == 'POST':                                            
+            if 'like' in request.form:  # This is kind of a mess, but basically, it checks to see if a user has a preference for this restaurant, and then either creates one or alters the old preference based on which button was pressed.
+                queryPreference = Preferences.query.filter_by(user_id=current_user.id, business_id=businessId).first()
+                if queryPreference:
+                    queryPreference.likes = not queryPreference.likes
+                    queryPreference.dislikes = not queryPreference.dislikes
+                    db.session.commit()
+                    return render_template("restaurant.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), preference=queryPreference, business=parsed, restaurantMap=restaurantMap, reviews=allReviews)
+                else:    
+                    newPreference = Preferences(user_id=current_user.id, business_id=businessId, business_name=parsed["name"], business_image_url=parsed["image_url"], business_rating=parsed["rating"], business_rating_count=parsed["review_count"], likes=True, dislikes=False)
+                    db.session.add(newPreference)
+                    db.session.commit()
+                    return render_template("restaurant.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), preference=newPreference, business=parsed, restaurantMap=restaurantMap, reviews=allReviews)
+            if 'dislike' in request.form:
+                queryPreference = Preferences.query.filter_by(user_id=current_user.id, business_id=businessId).first()
+                if queryPreference:
+                    queryPreference.likes = not queryPreference.likes
+                    queryPreference.dislikes = not queryPreference.dislikes
+                    db.session.commit()
+                    return render_template("restaurant.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), preference=queryPreference, business=parsed, restaurantMap=restaurantMap, reviews=allReviews)
+                else:    
+                    newPreference = Preferences(user_id=current_user.id, business_id=businessId, business_name=parsed["name"], business_image_url=parsed["image_url"], business_rating=parsed["rating"], business_rating_count=parsed["review_count"], likes=False, dislikes=True)
+                    db.session.add(newPreference)
+                    db.session.commit()
+                    return render_template("restaurant.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), preference=newPreference, business=parsed, restaurantMap=restaurantMap, reviews=allReviews)
+
+            if 'submit-review' in request.form:             
+                reviewText = request.form.get('review')                                                                     
+                dateVisited = request.form.get('date-visited')
+                rating = request.form.get('rating')
+                             
+                queryReview = Reviews.query.filter_by(username=current_user.username, business_id=businessId).first()       # Retrieving the data from the review form, checking to see if a user hasn't previously written a review for 
+                if queryReview:                                                                                             # this restaurant (not currently allowed, functionality for editing and deleting reviews will be added later),
+                    flash('You have already written a review for this business!', category='error')                         # and then creating a new Review object within our databse and committing the change.
+                elif len(reviewText) > 120:
+                    flash('Review cannot be more than 120 characters long!', category='error')
+                elif len(reviewText) < 4:
+                    flash('Review cannot be less than 4 characters long!', category='error')
+                else:
+                    newReview = Reviews(user_id=current_user.id, business_id=businessId, username=current_user.username, text=reviewText, date_visited=dateVisited, rating=rating)
+                    db.session.add(newReview)
+                    db.session.commit()
+
+                    flash('Review successfully submitted!', category='success')
+                    
+                    allReviews = Reviews.query.filter_by(business_id=businessId).all()
+                    queryPreference = Preferences.query.filter_by(user_id=current_user.id, business_id=businessId).first()
+                    return render_template("restaurant.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), preference=queryPreference, business=parsed, restaurantMap=restaurantMap, reviews=allReviews)
+
+        queryPreference = Preferences.query.filter_by(user_id=current_user.id, business_id=businessId).first()
+        return render_template("restaurant.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), preference=queryPreference, business=parsed, restaurantMap=restaurantMap, reviews=allReviews)
+        
     else:
-        return render_template("restaurant.html", user=current_user)
+        PARAMETERS = {}
+        response = requests.get(url=BUSINESS_DETAILS + businessId, 
+                                params=PARAMETERS, 
+                                headers=HEADERS)
+        parsed = json.loads(response.text)
+
+        restaurantMap = Map(
+        identifier="restaurantMap",
+        lat=parsed["coordinates"]["latitude"],
+        lng=parsed["coordinates"]["longitude"],
+        zoom=16,
+        markers=[
+          {
+             'icon': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+             'lat': parsed["coordinates"]["latitude"],
+             'lng': parsed["coordinates"]["longitude"],
+             'infobox': parsed["name"]
+          }
+        ],
+        maptype_control=False,
+        streetview_control=False,
+        zoom_control=False,
+        fullscreen_control=False
+        )
+
+        allReviews = Reviews.query.filter_by(business_id=businessId).all()
+
+        return render_template("restaurant.html", user=current_user, business=parsed, restaurantMap=restaurantMap, reviews=allReviews)
 
 @views.route('/recently-viewed')
 @login_required
@@ -104,3 +210,6 @@ def recentlyViewed():
 @login_required
 def myReviews():
     return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
+
+
+

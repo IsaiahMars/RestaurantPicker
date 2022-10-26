@@ -4,17 +4,20 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from sqlalchemy_utils.functions import database_exists
 from flask_simple_geoip import SimpleGeoIP
+from flask_googlemaps import GoogleMaps
 
 
 db = SQLAlchemy()                  # Creating the SQLAlchemy class object used to integrate our database into our project
-DB_NAME = 'NAME'                   # Currently, this project requires you to have an existing database hosted locally on your PC.
+DB_NAME = 'DB_NAME'                # Currently, this project requires you to have an existing database hosted locally on your PC.
 DB_ADDRESS = 'localhost'           # You must replace these variables here with the information of said database to establish a connection.
 DB_USER = 'root'
-DB_PASSWORD = 'PASSWORD'
+DB_PASSWORD = 'DB_PASSWORD'
 
 mail = Mail()
 
 simple_geoip = SimpleGeoIP()
+
+map = GoogleMaps()
 
 def createApp():
     app = Flask(__name__)       
@@ -26,13 +29,16 @@ def createApp():
     app.config['MAIL_SERVER']='smtp.gmail.com'                                  
     app.config['MAIL_PORT'] = 465                                                   # Configuring flask-mail as per documentation requirements, linked below:
     app.config['MAIL_USERNAME'] = 'restaurantpicker123@gmail.com'                   # https://pythonhosted.org/Flask-Mail/
-    app.config['MAIL_PASSWORD'] = 'APP_PASSWORD'
+    app.config['MAIL_PASSWORD'] = 'GOOGLE_APP_PASSWORD_HERE'
     app.config['MAIL_USE_TLS'] = False
     app.config['MAIL_USE_SSL'] = True
     mail.init_app(app)
 
-    app.config['GEOIPIFY_API_KEY'] = "YOUR_API_KEY"        # Configuring GeoIPify API as per documentation requirements, linked below: 
+    app.config['GEOIPIFY_API_KEY'] = 'GEOIPIFY_API_KEY_HERE'        # Configuring GeoIPify API as per documentation requirements, linked below: 
     simple_geoip.init_app(app)                                                 # https://pypi.org/project/Flask-Simple-GeoIP/
+
+    app.config['GOOGLEMAPS_KEY'] = 'GOOGLEMAPS_API_KEY_HERE'   # Configuring Google Maps API as per documentation requirements, linked below:
+    map.init_app(app)                                                          # https://pypi.org/project/flask-googlemaps/
 
     from .views import views
     from .auth import auth
@@ -47,12 +53,10 @@ def createApp():
     def load_user(id):
         return User.query.get(int(id))
 
-
     app.register_blueprint(views, url_prefix="/")  # Registering the blueprints for our routes used in our app.
     app.register_blueprint(auth, url_prefix="/")
 
     return app
-
 
 def createDatabase(app):
     if database_exists(app.config['SQLALCHEMY_DATABASE_URI']):   # Checks to see if the database exists, and creates the tables within our database that are required by our project
