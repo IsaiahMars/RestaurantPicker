@@ -1,5 +1,83 @@
 {% extends "base.html" %} {% block title %} Home {% endblock%} <!-- Title block containing page title -->
 
 {% block content%} <!-- Content block containing header tag -->
-    <h1>This is the home page</h1>
+<body>
+{% if trendingBusinesses[0] %}
+<div class="home-container">
+    <h2 class="home-header" id="temporaryID"> Trending: </h2>
+    <div class="home-list-container">
+        <button class="leftButton" id="scrollUp" onclick="scrollUp('trendingBusinesses')"><img src="../static/resources/left.png"></button>
+        <ul class="home-business-list" id="trendingBusinesses">
+            {% for business in trendingBusinesses %}
+                <li><a href="/restaurant/{{ business['id'] }}">
+                    <div class="home-business">
+                        <div class="home-image">
+                            <img src='{{ business["image_url"] }}' alt="Image">
+                        </div>
+                        <h4> {{ business["name"] }} </h4>
+                        <p> Rating: {{ business["rating"] }}, out of {{ business["review_count"] }} reviews.</p>
+                    </div>
+                </a></li>
+            {% endfor %}
+        </ul>
+        <button class="rightButton" id="scrollDown" onclick="scrollDown('trendingBusinesses')"><img src="../static/resources/right.png" alt="Right"></button>
+    </div>
+</div>
+{% endif %}
+{% if allBusinesses[0] %}
+<div class="home-container">
+    <h2 class="home-header">{%if allBusinesses|length == 50 %} 
+                                Top 50 results near '{{ location }}': 
+                            {% else %}
+                                All {{ allBusinesses|length }} results near '{{ location }}': <!-- temp location -->
+                            {%endif%}</h2>
+    <div class="home-list-container">
+        <button class="leftButton" id="scrollUp" onclick="scrollUp('allBusinesses')"><img src="../static/resources/left.png"></button>
+        <ul class="home-business-list" id="allBusinesses">
+            {% for business in allBusinesses %}
+                <li><a href="/restaurant/{{ business['id'] }}">
+                    <div class="home-business">
+                        <div class="home-image">
+                            <img src='{{ business["image_url"] }}' alt="Image">
+                        </div>
+                        <h4> {{ business["name"] }} </h4>
+                        <p> Rating: {{ business["rating"] }}, out of {{ business["review_count"] }} reviews.</p>
+                    </div>
+                </a></li>
+            {% endfor %}
+        </ul>
+        <button class="rightButton" id="scrollDown" onclick="scrollDown('allBusinesses')"><img src="../static/resources/right.png" alt="Right"></button>
+    </div>
+</div>
+{% endif %}
+{% if user.is_authenticated %}
+    {% if likedRestaurants[0] %}
+        <div class="home-container">
+            <h2 class="home-header"> Liked Restaurants: </h2>
+            <div class="home-list-container">
+                <button class="leftButton" id="scrollUp" onclick="scrollUp('likedBusinesses')"><img src="../static/resources/left.png"></button>
+                <ul class="home-business-list" id="likedBusinesses">
+                    {% for restaurant in likedRestaurants %}
+                        <li><a href="/restaurant/{{ restaurant.business_id }}">
+                            <div class="home-business">
+                                <div class="home-image">
+                                    <img src='{{ restaurant.business_image_url }}' alt="Image">
+                                </div>
+                                <h4> {{ restaurant.business_name }} </h4>
+                                <p> Rating: {{ restaurant.business_rating }}, out of {{ restaurant.business_rating_count }} reviews.</p>
+                            </div>
+                        </a></li>
+                    {% endfor %}
+                </ul>
+                <button class="rightButton" id="scrollDown" onclick="scrollDown('likedBusinesses')"><img src="../static/resources/right.png" alt="Right"></button>
+            </div>
+        </div>
+    {% else %}
+        <div class="home-container">
+            <h2 class="home-header"> Liked Restaurants: </h2>
+            <h2 class="no-likes"> There are no liked restaurants to display! </h2>
+        </div>
+    {% endif %}
+{% endif %}
+</body>
 {% endblock %}

@@ -35,10 +35,10 @@ def createApp():
     mail.init_app(app)
 
     app.config['GEOIPIFY_API_KEY'] = 'GEOIPIFY_API_KEY_HERE'        # Configuring GeoIPify API as per documentation requirements, linked below: 
-    simple_geoip.init_app(app)                                                 # https://pypi.org/project/Flask-Simple-GeoIP/
+    simple_geoip.init_app(app)                                      # https://pypi.org/project/Flask-Simple-GeoIP/
 
     app.config['GOOGLEMAPS_KEY'] = 'GOOGLEMAPS_API_KEY_HERE'   # Configuring Google Maps API as per documentation requirements, linked below:
-    map.init_app(app)                                                          # https://pypi.org/project/flask-googlemaps/
+    map.init_app(app)                                          # https://pypi.org/project/flask-googlemaps/
 
     from .views import views
     from .auth import auth

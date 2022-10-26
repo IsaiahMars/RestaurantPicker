@@ -1,9 +1,97 @@
-{% extends "base.html" %} {% block title %} Restaurant Name {% endblock%} <!-- Title block containing page title -->
+{% extends "base.html" %} {% block title %} {{ business["name"] }} {% endblock%} }} <!-- Title block containing page title -->
 
 {% block content%} <!-- Content block containing header tag -->
-    <h1>This is a page where restaurant info will be displayed </h1>
+<head>
+    {{ restaurantMap.js }}
+</head>
+<body>
+    <div class="restaurant-container">
+        <div class="left-side">
+            <img src="{{ business['image_url'] }}" alt="Image">
+            <hr />
+            {{ restaurantMap.html }}
+        </div>
+        <div class="right-side">
+            <div class="restaurant-info">
+                <h3> {{ business["name"] }} </h3>
+                <div class="rating">
+                    <p> {{ business["rating"] }}/5.0, out of {{ business["review_count"] }} reviews on Yelp. </p>
+                </div>
+                <div class="categories">
+                    {% for category in business["categories"] %}
+                        {% if loop.last %}
+                            <p> {{ category["title"] }}. </p>
+                        {% else %}
+                            <p> {{ category["title"] }}, </p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <a href="{{ business['url'] }}"> Link to website </a>
+                <div class="restaurant-contact">
+                    <p> Restaurant phone number: </p>
+                    <p> {{ business["display_phone"] }} </p>
+                </div>
+            </div>
+            {% if user.is_authenticated %}
+            <div class="restaurant-preference">
+                <form method="POST">
+                    {% if preference %}
+                        {% if preference.likes == None %}
+                            <label for="like"> Like <input name="like" id="like" type="checkbox" onChange="this.form.submit()"> </label> 
+                            <label for="dislike"> Dislike <input name="dislike" id="dislike" type="checkbox" onChange="this.form.submit()"> </label>
+                        {% elif preference.likes == True %}
+                            <label for="like" style="background: rgb(230, 230, 230); box-shadow: #1c1c1c 1px 1px 1px;"> Like <input name="like" id="like" type="checkbox" onChange="this.form.submit()" checked> </label>
+                            <label for="dislike"> Dislike <input name="dislike" id="dislike" type="checkbox" onChange="this.form.submit()"> </label>
+                        {% else %}
+                            <label for="like"> Like <input name="like" id="like" type="checkbox" onChange="this.form.submit()"> </label>
+                            <label for="dislike" style="background: rgb(230, 230, 230); box-shadow: #1c1c1c 1px 1px 1px;"> Dislike <input name="dislike" id="dislike" type="checkbox" onChange="this.form.submit()" checked> </label>
+                        {% endif %}
+                    {% else %}
+                        <label for="like"> Like <input name="like" id="like" type="checkbox" onChange="this.form.submit()"> </label>
+                        <label for="dislike"> Dislike <input name="dislike" id="dislike" type="checkbox" onChange="this.form.submit()"> </label>
+                    {% endif %}
+                </form>
+            </div>
+            {% endif %}
+            <div class="restaurant-reviews">
+                {% if user.is_authenticated %}
+                    <form method="POST">
+                        <label for="review"> Leave a review: </label>
+                        <textarea name="review" placeholder="(120 character limit)"></textarea>
+                        <div class="review-details">
+                            <div class="detail">
+                                <label for="date-visited"> Date Visited: </label>
+                                <input name="date-visited" id="date-visited" type="date" min="2017-01-01" max="2030-1-1"> <!-- this is later changed by the script in base.html -->
+                            </div>
+                            <div class="detail">
+                                <label for="rating"> Rating: </label>
+                                <input name="rating" id="rating-input" type="number" min="0" max="5" step=".1" placeholder="0-5">
+                            </div>
+                        </div>
+                        <button name="submit-review" type="submit" style="background-color: {{ user.secondaryColor }};"> Submit </button>
+                    </form>
+                {% endif %}
+                {% if reviews[0] %}
+                    <div class="existing-reviews">
+                        <h3> Reviews: </h3>
+                        <ul>
+                            {% for review in reviews %}
+                            <li class="review">
+                                <p class="body"> {{ review.text }} </p>
+                                <p class="rating"> {{ review.rating }} out of 5 </p>
+                                <h5 class="author"> By: {{ review.username }}, who visited on {{ review.date_visited }}. </h5>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="no-reviews">
+                        <h3> There are no reviews to display! </h2>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+
 {% endblock %} 
-
-
-<!-- There is currently no way to navigate to this page because the functionality -->
-<!-- for retrieving restaurant data has not yet been added.                       -->

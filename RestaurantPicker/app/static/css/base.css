@@ -387,3 +387,371 @@
     font-size: 20px;
 }
 /* CSS FOR RECOVERY ERROR */
+/* ---------------------- */
+/*   CSS FOR HOME PAGE    */
+
+.home-container {
+    margin: 1em auto;
+    width: 86vw;
+}
+
+.home-container .no-likes {
+    margin: 3em auto;
+    text-align: center;
+    font-size: 20px;
+}
+
+.home-header{
+    margin-left: 1em;
+    margin-bottom: .5em;
+    text-decoration: underline;
+    cursor: default;
+}
+
+.home-list-container{
+    margin: 0 auto;
+    display: flex;
+    position: relative;
+}
+
+.home-list-container .leftButton {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 40%;
+    left: 0;
+    border: none;
+    background: rgba(1, 1, 1, 0);
+    outline: none;
+}
+
+.home-list-container .rightButton {
+    position: absolute;
+    margin: 0 1em;
+    width: 50px;
+    height: 50px;
+    top: 40%;
+    right: 0;
+    border: none;
+    background: rgba(1, 1, 1, 0);
+    outline: none;
+}
+
+.home-list-container button img {
+    width: 50px;
+    height: 50px;
+}
+
+
+.home-business-list {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+    list-style-type: none;
+}
+
+.home-business-list::-webkit-scrollbar{
+    display: none;
+}
+
+.home-business-list li {
+    display:inline;
+    padding-right: 1em;
+}
+
+.home-business-list li a {
+    text-decoration: none;
+    color: black;
+}
+
+.home-business {
+    margin: 1em auto;
+    border: 2px solid black;
+    width: 280px;
+    height: 300px;
+}
+
+.home-business h4 {
+    margin: 1em auto;
+    text-align: center;
+    font-size: 16px;
+    text-decoration: underline;
+}
+
+.home-business p {
+    margin: 1em auto;
+    text-align: center;
+    font-size: 14px;
+}
+
+.home-business .home-image {
+    width: 200px;
+    height: 200px;
+    margin: .5em auto;
+}
+
+.home-business .home-image img {
+    width: 200px;
+    height: 200px;
+    border: 2px solid black;
+}
+
+/*    CSS FOR HOME PAGE    */
+/* ----------------------  */
+/* CSS FOR RESTAURANT PAGE */
+
+.restaurant-container {
+    width: 80vw;
+    margin: .5em 18%;
+    display: flex;
+    flex-direction: row;
+}
+
+.restaurant-container .left-side{
+    display: flex;
+    flex-direction: column;
+}
+
+.restaurant-container .left-side img{
+    width: 30vw;
+    height: 450px;
+    margin: 1em;
+    margin-bottom: 0;
+    border: 2px solid black;
+}
+
+.restaurant-container .left-side hr {
+    color: black;
+    margin: 1em;
+    height: 2px;
+}
+
+.restaurant-container .left-side #restaurantMap {
+    margin: 0 auto;
+    width: 30vw;
+    height: 350px;
+    border: 2px solid black;
+}
+
+.restaurant-container .right-side{
+    display: flex;
+    flex-direction: column;
+}
+
+.restaurant-container .right-side .restaurant-info {
+    width: 45vw;
+    height: fit-content;
+    margin: 1em;
+}
+
+.restaurant-container .right-side .restaurant-info h3 {
+    font-size: 40px;
+    font-weight: large;
+}
+
+.restaurant-container .right-side .restaurant-info .categories {
+    display: flex;
+    flex-direction: row;
+    margin-left: .4em;
+    margin-bottom: 2em;
+}
+
+.restaurant-container .right-side .restaurant-info .categories p {
+    padding-right: .3em;
+    font-size: 25px;
+}
+
+.restaurant-container .right-side .restaurant-info .rating {
+    display: flex;
+    flex-direction: row;
+    width: 350px;
+    border-bottom: 2px solid black;
+    margin-left: .4em;
+    margin-bottom: 1em;
+}
+
+.restaurant-container .right-side .restaurant-info .rating p {
+    padding: .2em;
+    font-size: 20px;
+}
+
+.restaurant-container .right-side .restaurant-info .rating img{
+    width: 20px;
+    height: 20px;
+    border: none
+}
+
+.restaurant-container .right-side a {
+    color: black;
+    margin: 2em;
+    margin-left: .4em;
+    font-size: 20px;
+    text-decoration: underline;
+}
+
+.restaurant-container .right-side .restaurant-contact{
+    margin: 1.5em;
+    margin-left: .4em;
+    font-size: 20px;
+}
+
+.restaurant-container .right-side .restaurant-contact p{
+    margin: 0;
+}
+
+.restaurant-container .right-side .restaurant-preference {
+    margin: 0 1.1em;
+}
+
+.restaurant-container .right-side .restaurant-preference form label {
+    margin-left: .5em;
+    width: 70px;
+    height: 40px;
+    padding: .5em;
+    text-align: center;
+    box-shadow: #1c1c1c 1px 2px 2px;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.restaurant-container .right-side .restaurant-preference form label input{
+    display: none;
+}
+
+.restaurant-container .right-side .restaurant-reviews{
+    width: 400px;
+    height: 600px;
+    margin: 1em 1em;
+}
+
+.restaurant-container .right-side .restaurant-reviews form {
+    width: 380px;
+    height: 210px;
+    display: flex;
+    flex-direction: column;
+    margin: .3em auto;
+}
+
+
+.restaurant-container .right-side .restaurant-reviews form label {
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: .1em;
+}
+
+.restaurant-container .right-side .restaurant-reviews form textarea {
+    margin-left: .2em;
+    height: 110px;
+    width: 97%;
+    text-align: start;
+}
+
+.restaurant-container .right-side .restaurant-reviews form .review-details {
+    display: flex;
+    flex-direction: row;
+    margin: .2em;
+}
+
+.restaurant-container .right-side .restaurant-reviews form .review-details .detail {
+    display: flex;
+    flex-direction: column;
+}
+
+.restaurant-container .right-side .restaurant-reviews form .review-details label {
+    font-size: 14px;
+    margin: 0;
+}
+
+.restaurant-container .right-side .restaurant-reviews form .review-details input {
+    margin-right: 2em;
+}
+
+.restaurant-container .right-side .restaurant-reviews form .review-details #rating-input {
+    width: 50px;
+}
+
+#rating-input::-webkit-outer-spin-button,
+#rating-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#rating-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.restaurant-container .right-side .restaurant-reviews form button {
+    border: 1px solid black;
+    box-shadow: #1c1c1c 1px 2px 1px;
+    padding: .2em;
+    width: 97%;
+    margin-left: .2em;
+    color: white;
+    font-weight: 500;
+}
+
+.restaurant-container .right-side .restaurant-reviews .existing-reviews {
+    width: 100%;
+}
+
+.restaurant-container .right-side .restaurant-reviews .existing-reviews h3 {
+    text-align: left;
+    padding-left: .8em;
+}
+
+.restaurant-container .right-side .restaurant-reviews .existing-reviews ul {
+    overflow-y: auto;
+    list-style-type: none;
+    width: 95%;
+    height: 360px;
+    border: 2px solid black;
+    margin: 0 auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;
+}
+
+.restaurant-container .right-side .restaurant-reviews .existing-reviews ul::-webkit-scrollbar{
+    display: none;
+}
+
+.restaurant-container .right-side .restaurant-reviews .existing-reviews .review {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 170px;
+    border: 1px solid black;
+    margin: .3em 0;
+}
+
+.restaurant-container .right-side .restaurant-reviews .existing-reviews .review .body {
+    padding: .3em;
+    height: 140px;
+    font-size: 18px;
+    border-bottom: 1px solid black;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.restaurant-container .right-side .restaurant-reviews .existing-reviews .review .author{
+    padding-left: .5em;
+    font-size: 14px;
+}
+
+.restaurant-container .right-side .restaurant-reviews .existing-reviews .review .rating{
+    padding-left: .5em;
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.restaurant-container .right-side .restaurant-reviews .no-reviews {
+    margin: .5em auto;
+}
+
+.restaurant-container .right-side .restaurant-reviews h3{
+    text-align: center;
+}
+
+
+
+
