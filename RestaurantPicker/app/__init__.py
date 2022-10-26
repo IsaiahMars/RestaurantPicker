@@ -3,15 +3,18 @@ from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from sqlalchemy_utils.functions import database_exists
+from flask_simple_geoip import SimpleGeoIP
 
 
 db = SQLAlchemy()                  # Creating the SQLAlchemy class object used to integrate our database into our project
-DB_NAME = 'restaurantpickerdb'     # Currently, this project requires you to have an existing database hosted locally on your PC.
-DB_ADDRESS = '127.0.0.1'           # You must replace these variables here with the information of said database to establish a connection.
+DB_NAME = 'NAME'                   # Currently, this project requires you to have an existing database hosted locally on your PC.
+DB_ADDRESS = 'localhost'           # You must replace these variables here with the information of said database to establish a connection.
 DB_USER = 'root'
-DB_PASSWORD = 'steamyhams123'
+DB_PASSWORD = 'PASSWORD'
 
 mail = Mail()
+
+simple_geoip = SimpleGeoIP()
 
 def createApp():
     app = Flask(__name__)       
@@ -23,10 +26,13 @@ def createApp():
     app.config['MAIL_SERVER']='smtp.gmail.com'                                  
     app.config['MAIL_PORT'] = 465                                                   # Configuring flask-mail as per documentation requirements, linked below:
     app.config['MAIL_USERNAME'] = 'restaurantpicker123@gmail.com'                   # https://pythonhosted.org/Flask-Mail/
-    app.config['MAIL_PASSWORD'] = 'cisxkmdvrnhubtui'
+    app.config['MAIL_PASSWORD'] = 'APP_PASSWORD'
     app.config['MAIL_USE_TLS'] = False
     app.config['MAIL_USE_SSL'] = True
     mail.init_app(app)
+
+    app.config['GEOIPIFY_API_KEY'] = "YOUR_API_KEY"        # Configuring GeoIPify API as per documentation requirements, linked below: 
+    simple_geoip.init_app(app)                                                 # https://pypi.org/project/Flask-Simple-GeoIP/
 
     from .views import views
     from .auth import auth

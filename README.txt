@@ -18,6 +18,10 @@ In Visual Studio Code, open a terminal with ctrl + `, and type "pip install pack
     cryptography
     azure-storage-blob
     flask-mail
+    requests
+    simple-geoip
+    
+    
 
 
 
