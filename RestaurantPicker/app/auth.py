@@ -5,10 +5,10 @@
 
 import os
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from flask_login import login_user, login_required, logout_user, current_user, AnonymousUserMixin
+from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from azure.storage.blob import BlobServiceClient
-from flask_mail import Mail, Message
+from flask_mail import Message
 import secrets #https://blog.miguelgrinberg.com/post/the-new-way-to-generate-secure-tokens-in-python
 import datetime
 from datetime import timedelta
@@ -92,7 +92,7 @@ def signUp():
         elif len(password1) > 49:
             flash('Password must be less than 50 characters.', category='error')
         else:
-            new_user = User(email=email, username=username, password=generate_password_hash(password1, method="sha256"), bio="None.", userImage="default", primaryColor="#8a111f", secondaryColor="#7d7d7d")  
+            new_user = User(email=email, username=username, password=generate_password_hash(password1, method="sha256"), userImage="default", primaryColor="#8a111f", secondaryColor="#7d7d7d")  
             db.session.add(new_user)
             db.session.commit()                                                     # Creating a new object within our database, storing a user's password as its hashed value for security.
 
@@ -239,15 +239,18 @@ def resetPassword(userId, token):
             flash('Password updated successfully!', category='success')
             return redirect(url_for("auth.login"))
     
-    queryUser = User.query.filter_by(id=userId).first()                                             # Retreiving the user and latest token used in the password recovery process,
-    queryToken =Token.query.filter_by(user_id=queryUser.id).order_by(Token.id.desc()).first()       # checking to see if the token still exists and isn't expired, and then rendering
-    if queryUser and check_password_hash(queryToken.token, token):                                  # the appropriate HTML file based on these conditions.
-        currentTime = datetime.utcnow()
-        expiryTime = queryToken.time_created + timedelta(minutes=2)
-        if currentTime > expiryTime:
+    queryUser = User.query.filter_by(id=userId).first()                                                 
+    queryToken =Token.query.filter_by(user_id=queryUser.id).order_by(Token.id.desc()).first()           # Retreiving the user and latest token used in the password recovery process,
+    if queryToken:                                                                                      # checking to see if the token still exists and isn't expired, and then rendering
+        if queryUser and check_password_hash(queryToken.token, token):                                  # the appropriate HTML file based on these conditions.
+            currentTime = datetime.utcnow()
+            expiryTime = queryToken.time_created + timedelta(minutes=2)
+            if currentTime > expiryTime:
+             return render_template("recovery-error.html", user=current_user)
+            else:
+                return render_template("reset-password.html", user=current_user)
+        else:        
             return render_template("recovery-error.html", user=current_user)
-        else:
-            return render_template("reset-password.html", user=current_user)
     else:        
         return render_template("recovery-error.html", user=current_user)
 
@@ -267,7 +270,7 @@ from datetime import datetime, timedelta
 from azure.storage.blob import generate_container_sas, ContainerSasPermissions
 
 account_name = "restaurantpicker"
-account_key = "BHyo+0c75/6uLVNF0WvqsKbtu/g07bSpw6VIdrG1WgMcJHNiw6PGlOKiSVCavKzi6Z44jMr/og8w+ASt/F8mkg==;EndpointSuffix=core.windows.net"
+account_key = "ACCOUNT KEY"
 container_name = "user-images"
 
 from azure.storage.blob import generate_blob_sas, BlobSasPermissions

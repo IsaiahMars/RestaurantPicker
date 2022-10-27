@@ -8,10 +8,10 @@ from flask_googlemaps import GoogleMaps
 
 
 db = SQLAlchemy()                  # Creating the SQLAlchemy class object used to integrate our database into our project
-DB_NAME = 'DB_NAME'                # Currently, this project requires you to have an existing database hosted locally on your PC.
-DB_ADDRESS = 'localhost'           # You must replace these variables here with the information of said database to establish a connection.
+DB_NAME = 'DB NAME'                # Currently, this project requires you to have an existing database hosted locally on your PC.
+DB_ADDRESS = '127.0.0.1'           # You must replace these variables here with the information of said database to establish a connection.
 DB_USER = 'root'
-DB_PASSWORD = 'DB_PASSWORD'
+DB_PASSWORD = 'DB PASSWORD'
 
 mail = Mail()
 
@@ -21,7 +21,7 @@ map = GoogleMaps()
 
 def createApp():
     app = Flask(__name__)       
-    app.config['SECRET_KEY'] = "restPicker123"                                                                      # Creating our Flask app object and establishing a connection to MySQL server.
+    app.config['SECRET_KEY'] = "SECRET_KEY"                                                                         # Creating our Flask app object and establishing a connection to MySQL server.
     app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_ADDRESS}/{DB_NAME}'       # 'pymysql' is injected into the uri here to allow us to access MySQL databases with SQLAlchemy code.
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False                                                            # Disabling 'Track Modifications' reduces significant overhead.
     db.init_app(app)
@@ -29,15 +29,15 @@ def createApp():
     app.config['MAIL_SERVER']='smtp.gmail.com'                                  
     app.config['MAIL_PORT'] = 465                                                   # Configuring flask-mail as per documentation requirements, linked below:
     app.config['MAIL_USERNAME'] = 'restaurantpicker123@gmail.com'                   # https://pythonhosted.org/Flask-Mail/
-    app.config['MAIL_PASSWORD'] = 'GOOGLE_APP_PASSWORD_HERE'
+    app.config['MAIL_PASSWORD'] = 'GOOGLE MAIL PASSWORD'
     app.config['MAIL_USE_TLS'] = False
     app.config['MAIL_USE_SSL'] = True
     mail.init_app(app)
 
-    app.config['GEOIPIFY_API_KEY'] = 'GEOIPIFY_API_KEY_HERE'        # Configuring GeoIPify API as per documentation requirements, linked below: 
+    app.config['GEOIPIFY_API_KEY'] = "GEOIPIFY KEY"                 # Configuring GeoIPify API as per documentation requirements, linked below: 
     simple_geoip.init_app(app)                                      # https://pypi.org/project/Flask-Simple-GeoIP/
 
-    app.config['GOOGLEMAPS_KEY'] = 'GOOGLEMAPS_API_KEY_HERE'   # Configuring Google Maps API as per documentation requirements, linked below:
+    app.config['GOOGLEMAPS_KEY'] = 'GOOGLE MAPS KEY'           # Configuring Google Maps API as per documentation requirements, linked below:
     map.init_app(app)                                          # https://pypi.org/project/flask-googlemaps/
 
     from .views import views

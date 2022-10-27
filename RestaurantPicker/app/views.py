@@ -10,7 +10,7 @@ from . import db, simple_geoip
 views = Blueprint('views', __name__)
 
 # Definining the API Key, Search Type, and Header
-MY_API_KEY = 'YOUR_API_KEY_HERE'
+MY_API_KEY = 'YELP API KEY'
 BUSINESS_SEARCH = 'https://api.yelp.com/v3/businesses/search'
 BUSINESS_DETAILS = 'https://api.yelp.com/v3/businesses/'
 HEADERS = {'Authorization': 'bearer %s' % MY_API_KEY}
@@ -42,11 +42,11 @@ def home():
                                 headers=HEADERS)
         parsed = json.loads(response.text)
         allBusinesses = parsed["businesses"]
-        likedRestaurants = Preferences.query.filter_by(user_id=current_user.id, likes=True).all()   # Simple SQLAlchemy query used to retrieve all of the current user's 'liked' restaurants.
+        likedRestaurants = Preferences.query.filter_by(user_id=current_user.id, likes=True).order_by(Preferences.id.desc()).all()    # Simple SQLAlchemy query used to retrieve all of the current user's 'liked' restaurants.
         return render_template("home.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), trendingBusinesses=trendingBusinesses, allBusinesses=allBusinesses, likedRestaurants=likedRestaurants, location=geoip_data['location']['city'])
 
     else:
-        #geoip_data = simple_geoip.get_geoip_data('137.142.211.54')  #temp user location
+        #geoip_data = simple_geoip.get_geoip_data('137.142.211.54')  
         geoip_data = {'location':{'city':'Plattsburgh'}}
         PARAMETERS = {'location':geoip_data['location']['city'],   
               'radius':2500,
@@ -60,7 +60,7 @@ def home():
         parsed = json.loads(response.text)
         trendingBusinesses = parsed["businesses"]
 
-        PARAMETERS = {'location':geoip_data['location']['city'],    #temp user location
+        PARAMETERS = {'location':geoip_data['location']['city'],  
               'radius':2500,
               'limit': 50,
               'term':'restaurant'
