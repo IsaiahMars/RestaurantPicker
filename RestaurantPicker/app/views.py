@@ -4,13 +4,13 @@ from flask import Blueprint, render_template, request, flash
 from flask_login import current_user, login_required
 from flask_googlemaps import Map
 from .auth import get_img_url_with_blob_sas_token
-from .models import Preferences, Reviews
+from .models import Preferences, Reviews, RecentlyViewed
 from . import db, simple_geoip
 
 views = Blueprint('views', __name__)
 
 # Definining the API Key, Search Type, and Header
-MY_API_KEY = 'YELP API KEY'
+MY_API_KEY = 'YELP_API_KEY'
 BUSINESS_SEARCH = 'https://api.yelp.com/v3/businesses/search'
 BUSINESS_DETAILS = 'https://api.yelp.com/v3/businesses/'
 HEADERS = {'Authorization': 'bearer %s' % MY_API_KEY}
@@ -46,7 +46,7 @@ def home():
         return render_template("home.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), trendingBusinesses=trendingBusinesses, allBusinesses=allBusinesses, likedRestaurants=likedRestaurants, location=geoip_data['location']['city'])
 
     else:
-        #geoip_data = simple_geoip.get_geoip_data('137.142.211.54')  
+        #geoip_data = simple_geoip.get_geoip_data('137.142.211.54') 
         geoip_data = {'location':{'city':'Plattsburgh'}}
         PARAMETERS = {'location':geoip_data['location']['city'],   
               'radius':2500,
@@ -60,7 +60,7 @@ def home():
         parsed = json.loads(response.text)
         trendingBusinesses = parsed["businesses"]
 
-        PARAMETERS = {'location':geoip_data['location']['city'],  
+        PARAMETERS = {'location':geoip_data['location']['city'],   
               'radius':2500,
               'limit': 50,
               'term':'restaurant'
@@ -97,7 +97,17 @@ def restaurant(businessId):
                                 params=PARAMETERS, 
                                 headers=HEADERS)
         parsed = json.loads(response.text)
-
+        ###########
+        newRV = RecentlyViewed(user_id=current_user.id, business_id=businessId, business_name=parsed["name"], business_image_url=parsed["image_url"], business_rating=parsed["rating"], business_rating_count=parsed["review_count"])
+        queryRV = RecentlyViewed.query.filter_by(user_id=current_user.id, business_id=businessId).first()
+        allRV = RecentlyViewed.query.filter_by(user_id=current_user.id).all()
+        if queryRV:     
+            db.session.delete(queryRV)                              # marking new code so I can comment on it later
+        if len(allRV) > 11:
+            db.session.delete(allRV[0])
+        db.session.add(newRV)
+        db.session.commit()
+        ###########
         restaurantMap = Map(                                                # This is a Google Map's element which is fed the longitude and latitude data from the 'Business Details' get request       
         identifier="restaurantMap",                                         # in order to display a restaurant's location. 
         lat=parsed["coordinates"]["latitude"],                              # Roughly based on the documentation, linked here: https://pypi.org/project/flask-googlemaps/
@@ -204,7 +214,8 @@ def restaurant(businessId):
 @views.route('/recently-viewed')
 @login_required
 def recentlyViewed():
-    return render_template("recently-viewed.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
+    recentlyViewedPages = RecentlyViewed.query.filter_by(user_id=current_user.id).order_by(RecentlyViewed.id.desc()).all()
+    return render_template("recently-viewed.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), recentlyViewedPages=recentlyViewedPages)
 
 @views.route('/my-reviews')
 @login_required

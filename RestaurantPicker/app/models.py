@@ -42,3 +42,11 @@ class Reviews(db.Model):
     date_visited = db.Column(db.String(11))
     rating = db.Column(db.Float)
 
+class RecentlyViewed(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    business_id = db.Column(db.String(30))
+    business_name = db.Column(db.String(50))
+    business_image_url = db.Column(db.String(100))
+    business_rating = db.Column(db.Float)
+    business_rating_count = db.Column(db.Integer)

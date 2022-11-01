@@ -1,5 +1,50 @@
 {% extends "base.html" %} {% block title %} Recently Viewed {% endblock%} <!-- Title block containing page title -->
 
 {% block content%} <!-- Content block containing header tag -->
-    <h1>This is the recently viewed page</h1>
+    <div class="recently-viewed-container">
+        <h2> Recently Viewed: </h2>
+        {% if recentlyViewedPages[0] %}
+        <ul class="recently-viewed-list">
+            {% for business in recentlyViewedPages[0:4] %}
+                <li><a href="/restaurant/{{ business.business_id }}">
+                    <div class="rv-business">
+                        <div class="rv-image">
+                            <img src='{{ business.business_image_url }}' alt="Image">
+                        </div>
+                        <h4> {{ business.business_name }} </h4>
+                        <p> Rating: {{ business.business_rating }}, out of {{ business.business_rating_count }} reviews.</p>
+                    </div>
+                </a></li>
+            {% endfor %}
+        </ul>
+        <ul class="recently-viewed-list">
+            {% for business in recentlyViewedPages[4:8] %}
+                <li><a href="/restaurant/{{ business.business_id }}">
+                    <div class="rv-business">
+                        <div class="rv-image">
+                            <img src='{{ business.business_image_url }}' alt="Image">
+                        </div>
+                        <h4> {{ business.business_name }} </h4>
+                        <p> Rating: {{ business.business_rating }}, out of {{ business.business_rating_count }} reviews.</p>
+                    </div>
+                </a></li>
+            {% endfor %}
+        </ul>
+        <ul class="recently-viewed-list">
+            {% for business in recentlyViewedPages[8:] %}
+                <li><a href="/restaurant/{{ business.business_id }}">
+                    <div class="rv-business">
+                        <div class="rv-image">
+                            <img src='{{ business.business_image_url }}' alt="Image">
+                        </div>
+                        <h4> {{ business.business_name }} </h4>
+                        <p> Rating: {{ business.business_rating }}, out of {{ business.business_rating_count }} reviews.</p>
+                    </div>
+                </a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <h4 class="no-recently-viewed"> You have not viewed any restaurants! </h4>
+        {% endif %}
+    </div>
 {% endblock %}

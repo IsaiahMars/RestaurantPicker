@@ -12,13 +12,13 @@ from flask_mail import Message
 import secrets #https://blog.miguelgrinberg.com/post/the-new-way-to-generate-secure-tokens-in-python
 import datetime
 from datetime import timedelta
-from .models import User, Token
+from .models import User, Token, Reviews
 from . import db, mail
 
 auth = Blueprint('auth', __name__)
 
 
-blob_service = BlobServiceClient.from_connection_string(conn_str="DefaultEndpointsProtocol=https;AccountName=restaurantpicker;AccountKey=BHyo+0c75/6uLVNF0WvqsKbtu/g07bSpw6VIdrG1WgMcJHNiw6PGlOKiSVCavKzi6Z44jMr/og8w+ASt/F8mkg==;EndpointSuffix=core.windows.net")
+blob_service = BlobServiceClient.from_connection_string(conn_str="DefaultEndpointsProtocol=https;AccountName=restaurantpicker;AccountKey=AZURE_STORAGE_KEY")
 
 try:
     container_client = blob_service.get_container_client(container="user-images")  # Connecting to Azure Blob Storage and accessing the container used to store user images
@@ -158,6 +158,9 @@ def account():
             else:
                 user = User.query.filter_by(id=current_user.id).first()
                 user.username = newUsername
+                userReviews = Reviews.query.filter_by(user_id=current_user.id).all()
+                for review in userReviews:                                                              # Retrieving all reviews for the current user and changing their 'username'
+                    review.username = newUsername                                                       # attribute before committing all changes to the database
                 db.session.commit()
     
                 flash('Username updated successfully!', category='success')
@@ -270,7 +273,7 @@ from datetime import datetime, timedelta
 from azure.storage.blob import generate_container_sas, ContainerSasPermissions
 
 account_name = "restaurantpicker"
-account_key = "ACCOUNT KEY"
+account_key = "BHyo+0c75/6uLVNF0WvqsKbtu/g07bSpw6VIdrG1WgMcJHNiw6PGlOKiSVCavKzi6Z44jMr/og8w+ASt/F8mkg==;EndpointSuffix=core.windows.net"
 container_name = "user-images"
 
 from azure.storage.blob import generate_blob_sas, BlobSasPermissions
