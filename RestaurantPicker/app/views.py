@@ -217,10 +217,16 @@ def recentlyViewed():
     recentlyViewedPages = RecentlyViewed.query.filter_by(user_id=current_user.id).order_by(RecentlyViewed.id.desc()).all()
     return render_template("recently-viewed.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), recentlyViewedPages=recentlyViewedPages)
 
-@views.route('/my-reviews')
+@views.route('/my-reviews', methods=['GET', 'POST'])
 @login_required
 def myReviews():
     return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
+    if(request.method=='POST'):
+        queryReviewsDesc = Reviews.query.filter_by(user_id=current_user.id).order_by(Reviews.id.desc()).all()
+        return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), reviews=queryReviewsDesc)
 
+    queryReviews = Reviews.query.filter_by(user_id=current_user.id).all()
+    return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage)
+, reviews=queryReviews)
 
 
