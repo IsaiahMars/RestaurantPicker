@@ -1,16 +1,19 @@
 # This file will be used to create our other routes (randomizer page, map page, etc...)
-import requests, json
-from flask import Blueprint, render_template, request, flash
-from flask_login import current_user, login_required
+import json
+
+import requests
+from flask import Blueprint, flash, render_template, request
 from flask_googlemaps import Map
-from .auth import get_img_url_with_blob_sas_token
-from .models import Preferences, Reviews, RecentlyViewed
+from flask_login import current_user, login_required
+
 from . import db, simple_geoip
+from .auth import get_img_url_with_blob_sas_token
+from .models import Preferences, RecentlyViewed, Reviews
 
 views = Blueprint('views', __name__)
 
 # Definining the API Key, Search Type, and Header
-MY_API_KEY = 'YELP_API_KEY'
+MY_API_KEY = 'POsgwBET3VXFgJA6YXuddB_zNXaHKTY-qwxAU4v0xUfMaS6vL1BaOdfJbrEJ9LFNNjmoJ15fLdJ2UjPXmt98Pa7tHOwkXmZLPUiBjjpX9RfVeESy8Hl4XT5-4NokY3Yx'
 BUSINESS_SEARCH = 'https://api.yelp.com/v3/businesses/search'
 BUSINESS_DETAILS = 'https://api.yelp.com/v3/businesses/'
 HEADERS = {'Authorization': 'bearer %s' % MY_API_KEY}
@@ -168,7 +171,7 @@ def restaurant(businessId):
                 elif len(reviewText) < 4:
                     flash('Review cannot be less than 4 characters long!', category='error')
                 else:
-                    newReview = Reviews(user_id=current_user.id, business_id=businessId, username=current_user.username, text=reviewText, date_visited=dateVisited, rating=rating)
+                    newReview = Reviews(user_id=current_user.id, business_id=businessId, username=current_user.username, text=reviewText, date_visited=dateVisited, rating=rating, image=parsed["image_url"], restaurant_name=parsed["name"])
                     db.session.add(newReview)
                     db.session.commit()
 
@@ -217,10 +220,10 @@ def recentlyViewed():
     recentlyViewedPages = RecentlyViewed.query.filter_by(user_id=current_user.id).order_by(RecentlyViewed.id.desc()).all()
     return render_template("recently-viewed.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), recentlyViewedPages=recentlyViewedPages)
 
-@views.route('/my-reviews', methods=['GET', 'POST'])
+@views.route('/my-reviews')
 @login_required
 def myReviews():
-    return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
+    #return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
     if(request.method=='POST'):
         queryReviewsDesc = Reviews.query.filter_by(user_id=current_user.id).order_by(Reviews.id.desc()).all()
         return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), reviews=queryReviewsDesc)

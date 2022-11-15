@@ -41,7 +41,9 @@ class Reviews(db.Model):
     text = db.Column(db.String(120))
     date_visited = db.Column(db.String(11))
     rating = db.Column(db.Float)
-
+    image = db.Column(db.String(200))
+    restaurant_name = db.Column(db.String(200))
+    
 class RecentlyViewed(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

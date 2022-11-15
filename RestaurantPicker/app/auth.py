@@ -18,7 +18,7 @@ from . import db, mail
 auth = Blueprint('auth', __name__)
 
 
-blob_service = BlobServiceClient.from_connection_string(conn_str="DefaultEndpointsProtocol=https;AccountName=restaurantpicker;AccountKey=AZURE_STORAGE_KEY")
+blob_service = BlobServiceClient.from_connection_string(conn_str="DefaultEndpointsProtocol=https;AccountName=restaurantpicker;AccountKey=o1+G85S7ZbOTXHUboiwVxuZBxYcgh+a1cRJM0ND5ROAGrFlycr0sm3G0/5KnU7CCCVldT+ewd+Tk+ASte+uqYA==;EndpointSuffix=core.windows.net")
 
 try:
     container_client = blob_service.get_container_client(container="user-images")  # Connecting to Azure Blob Storage and accessing the container used to store user images
@@ -273,7 +273,7 @@ from datetime import datetime, timedelta
 from azure.storage.blob import generate_container_sas, ContainerSasPermissions
 
 account_name = "restaurantpicker"
-account_key = "BHyo+0c75/6uLVNF0WvqsKbtu/g07bSpw6VIdrG1WgMcJHNiw6PGlOKiSVCavKzi6Z44jMr/og8w+ASt/F8mkg==;EndpointSuffix=core.windows.net"
+account_key = "o1+G85S7ZbOTXHUboiwVxuZBxYcgh+a1cRJM0ND5ROAGrFlycr0sm3G0/5KnU7CCCVldT+ewd+Tk+ASte+uqYA=="
 container_name = "user-images"
 
 from azure.storage.blob import generate_blob_sas, BlobSasPermissions

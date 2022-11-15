@@ -1,5 +1,26 @@
-{% extends "base.html" %} {% block title %} My Reviews {% endblock%} <!-- Title block containing page title -->
+{% extends "base.html" %} {% block title %} My Reviews {% endblock%}
+<!-- Title block containing page title -->
 
-{% block content%} <!-- Content block containing header tag -->
-    <h1>This is the page to display user reviews </h1>
-{% endblock %}
+{% block content%}
+<!-- Content block containing header tag -->
+<h1 style="margin-left: 320px">My review </h1>
+<hr st>
+<div class="container">
+    {% for review in reviews %}
+    <div class="container border border-dark">
+        <div class="card  d-flex p-2 flex-row " style="width: 20rem;">
+            <img src="{{review.image}}" class="card-img-top" alt="...">
+            <div class="card-body ">
+                <a href="/restaurant/{{ review.business_id }}"><h2 class="card-title">{{review.restaurant_name}}</h2></a>
+                <h5 class="card-title">{{review.username}}</h5>
+                <p class="card-text">{{review.text}}</p>
+                <p style="color: lightcoral;">Rating:{{review.rating}}</p>
+            </div>
+        </div>
+    </div>
+    <br>
+    {% endfor%}
+
+
+    {% endblock %}
+</div>

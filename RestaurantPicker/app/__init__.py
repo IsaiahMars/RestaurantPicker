@@ -8,10 +8,10 @@ from flask_googlemaps import GoogleMaps
 
 
 db = SQLAlchemy()                  # Creating the SQLAlchemy class object used to integrate our database into our project
-DB_NAME = 'DB NAME'                # Currently, this project requires you to have an existing database hosted locally on your PC.
-DB_ADDRESS = '127.0.0.1'           # You must replace these variables here with the information of said database to establish a connection.
+DB_NAME = 'restaurantpicker'                # Currently, this project requires you to have an existing database hosted locally on your PC.
+DB_ADDRESS = 'localhost'           # You must replace these variables here with the information of said database to establish a connection.
 DB_USER = 'root'
-DB_PASSWORD = 'DB PASSWORD'
+DB_PASSWORD = 'burger12345'
 
 mail = Mail()
 
@@ -29,15 +29,15 @@ def createApp():
     app.config['MAIL_SERVER']='smtp.gmail.com'                                  
     app.config['MAIL_PORT'] = 465                                                   # Configuring flask-mail as per documentation requirements, linked below:
     app.config['MAIL_USERNAME'] = 'restaurantpicker123@gmail.com'                   # https://pythonhosted.org/Flask-Mail/
-    app.config['MAIL_PASSWORD'] = 'FLASK MAIL PW'
+    app.config['MAIL_PASSWORD'] = 'cisxkmdvrnhubtui'
     app.config['MAIL_USE_TLS'] = False
     app.config['MAIL_USE_SSL'] = True
     mail.init_app(app)
 
-    app.config['GEOIPIFY_API_KEY'] = "GEOIPIFY KEY"                           # Configuring GeoIPify API as per documentation requirements, linked below: 
+    app.config['GEOIPIFY_API_KEY'] = "at_AGmMTd4XCvCmns9imq18bbn98QlS3"                           # Configuring GeoIPify API as per documentation requirements, linked below: 
     simple_geoip.init_app(app)                                                # https://pypi.org/project/Flask-Simple-GeoIP/
 
-    app.config['GOOGLEMAPS_KEY'] = 'GOOGLEMAPS KEY'                           # Configuring Google Maps API as per documentation requirements, linked below:
+    app.config['GOOGLEMAPS_KEY'] = 'AIzaSyBiaf_mimRB9_0peKov7nsryCHIckyaZ8c'                           # Configuring Google Maps API as per documentation requirements, linked below:
     map.init_app(app)                                                         # https://pypi.org/project/flask-googlemaps/
 
     from .views import views
