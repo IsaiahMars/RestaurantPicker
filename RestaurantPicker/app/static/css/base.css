@@ -530,7 +530,7 @@
 .restaurant-container .left-side #restaurantMap {
     margin: 0 auto;
     width: 30vw;
-    height: 350px;
+    height: 400px;
     border: 2px solid black;
 }
 
@@ -707,7 +707,7 @@
     height: 360px;
     border: 2px solid black;
     margin: 0 auto;
-    -ms-overflow-style: none;  /* IE and Edge */
+    -ms-overflow-style: none;  
     scrollbar-width: none;
 }
 
@@ -718,6 +718,7 @@
 .restaurant-container .right-side .restaurant-reviews .existing-reviews .review {
     display: flex;
     flex-direction: column;
+    position: relative;
     width: 300px;
     height: 170px;
     border: 1px solid black;
@@ -727,21 +728,52 @@
 .restaurant-container .right-side .restaurant-reviews .existing-reviews .review .body {
     padding: .3em;
     height: 140px;
+    width: 250px;
     font-size: 18px;
-    border-bottom: 1px solid black;
     margin-bottom: 0;
     text-align: left;
+}
+ 
+.restaurant-container .right-side .restaurant-reviews .existing-reviews .review .review-dropdown{
+    position: absolute;
+    top: 4%;
+    right: 1.7%;
+}
+
+.restaurant-container .right-side .restaurant-reviews .existing-reviews .review .review-dropdown .review-dropdown-menu {
+    margin-right: 2.5em;
+    width: 50px;
+    height: 45px;
+}
+
+.restaurant-container .right-side .restaurant-reviews .existing-reviews .review .review-dropdown .review-dropdown-menu form {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.restaurant-container .right-side .restaurant-reviews .existing-reviews .review .review-dropdown .review-dropdown-menu button {
+    width: 100px;
+    color: black;
+    margin: 0 1.7em;
+    border: none;
+    background: none;
+    box-shadow: none;
+    outline: none;
+    text-align: center;
 }
 
 .restaurant-container .right-side .restaurant-reviews .existing-reviews .review .author{
     padding-left: .5em;
     font-size: 14px;
-}
+}   
 
 .restaurant-container .right-side .restaurant-reviews .existing-reviews .review .rating{
     padding-left: .5em;
     font-size: 14px;
     margin-bottom: 0;
+    border-top: 1px solid black;
+
 }
 
 .restaurant-container .right-side .restaurant-reviews .no-reviews {
@@ -752,7 +784,176 @@
     text-align: center;
 }
 
-/*    CSS FOR RESTAURANT PAGE   */
+
+/* CSS FOR RESTAURANT PAGE */
+/* ----------------------  */
+/* CSS FOR MY REVIEWS PAGE */
+
+.user-reviews-container {
+    width: 650px;
+    margin: 1em auto;
+}
+
+.user-reviews-container .sortby-dropdown{
+    margin-left: 2.5em;
+}
+
+.user-reviews-container .sortby-dropdown .sortby-dropdown-menu {
+    width: 80px;
+}
+
+.user-reviews-container .sortby-dropdown .sortby-dropdown-menu button {
+    width: 100%;
+    height: auto;
+    background: none;
+    border: none;
+    outline: none;
+    margin-bottom: .2em;
+}
+
+.user-reviews-container .no-reviews {
+    margin: 2em auto;
+    text-align: center;
+}
+
+.user-reviews-container h2 {
+    margin-left: 1em;
+    padding-bottom: .5em;
+    font-size: 38px;
+    width: 85%;
+    border-bottom: 2px solid black;
+}
+
+.user-reviews-container .user-review-list {
+    width: 100%;
+    height: 50vw;
+    overflow-y: auto;
+    list-style-type: none;
+    -ms-overflow-style: none;  
+    scrollbar-width: none;
+}
+
+.user-reviews-container .user-review-list::-webkit-scrollbar{
+    display: none;
+}
+
+.user-reviews-container .user-review-list a {
+    text-decoration: none;
+    color: black;
+    display: flex;
+    width: fit-content;
+    margin-left: .7em;
+    margin-top: .5em;
+}
+
+.user-reviews-container .user-review-list a h4 {
+    font-size: 26px;
+}
+
+.user-reviews-container .user-review-list li {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid black;
+    width: 500px;
+    height: 170px;
+    margin: .2em .5em;
+}
+
+.user-reviews-container .user-review-list li img {
+    display: flex;
+    width: 150px;
+    height: 150px;
+    border: 1px solid black;
+    margin: .55em;
+}
+
+.user-reviews-container .user-review-list li .body {
+    padding: .3em;
+    height: 110px;
+    width: 300px;
+    font-size: 18px;
+    border-bottom: 1px solid black;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.user-reviews-container .user-review-list li .review-dropdown{
+    position: absolute;
+    top: 5%;
+    right: 1.5%;
+}
+
+.user-reviews-container .user-review-list li .review-dropdown .review-dropdown-menu {
+    margin-right: 3em;
+}
+
+.user-reviews-container .user-review-list li .review-dropdown .review-dropdown-menu form {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-reviews-container .user-review-list li .review-dropdown .review-dropdown-menu button {
+    width: 100%;
+    margin-bottom: .1em;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+.user-reviews-container .user-review-list li .author{
+    padding-left: .5em;
+    font-size: 16px;
+}
+
+.user-reviews-container .user-review-list li .rating{
+    padding-left: .5em;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+
+.edit-review-modal-body textarea {
+    display: flex;
+    width: 80%;
+    height: 100px;
+    margin: .1em auto;
+}
+
+.edit-review-modal-body .review-details {
+    display: flex;
+    flex-direction: row;
+    margin: .1em auto;
+    width: 80%;
+}
+
+.edit-review-modal-body .review-details .detail {
+    display: flex;
+    flex-direction: column;
+    margin-right: 70px;
+}
+
+.edit-review-modal-body .review-details .detail #modal-rating-input {
+    width: 40px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+#modal-rating-input::-webkit-outer-spin-button,
+#modal-rating-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#modal-rating-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.edit-review-modal-body .review-details .detail label {
+    margin-bottom: .1em;
+}
+
+/*    CSS FOR MY REVIEWS PAGE   */
 /*    ----------------------    */
 /* CSS FOR RECENTLY VIEWED PAGE */
 
@@ -832,6 +1033,23 @@
 }
 
 /* CSS FOR RECENTLY VIEWED PAGE */
+/*    ----------------------    */
+/*       CSS FOR MAP PAGE       */
 
+.map-container{
+    margin: 1em auto;
+    width: fit-content;
+}
 
+.map-container h2{
+    padding: .3em;
+    font-size: 36px;
+    border-bottom: 2px solid black;
+    margin-bottom: .5em;
+}
 
+.map-container #nearbyRestaurantsMap {
+    width: 60vw;
+    height: 40vw;
+    border: 1px solid black;
+}

@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     tokens = db.relationship('Token')
     preferences = db.relationship('Preferences')
     reviews = db.relationship('Reviews')
+    recentlyviewed = db.relationship('RecentlyViewed')
 
 class Token(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,17 +34,19 @@ class Preferences(db.Model):
     likes = db.Column(db.Boolean)
     dislikes = db.Column(db.Boolean)
 
+
 class Reviews(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     business_id = db.Column(db.String(30))
+    business_name = db.Column(db.String(50))
+    business_image_url = db.Column(db.String(100))
     username = db.Column(db.String(20))
     text = db.Column(db.String(120))
     date_visited = db.Column(db.String(11))
     rating = db.Column(db.Float)
-    image = db.Column(db.String(200))
-    restaurant_name = db.Column(db.String(200))
-    
+    flags = db.Column(db.Integer)
+
 class RecentlyViewed(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

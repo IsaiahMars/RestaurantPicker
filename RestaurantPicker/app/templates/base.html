@@ -144,17 +144,30 @@
     <!-- Based on: https://css-tricks.com/how-to-make-an-unobtrusive-scroll-to-top-button/                                              -->
     <script>
       function scrollDown(string) {
-      var element = document.getElementById(string)
-      element.scrollTo({
-      left: element.scrollLeft + 600,
-      behavior: "smooth"
+        var element = document.getElementById(string)
+        element.scrollTo({
+        left: element.scrollLeft + 600,
+        behavior: "smooth"
       })}
       function scrollUp(string) {
-      var element = document.getElementById(string)
-      element.scrollTo({
-      left: element.scrollLeft - 600,
-      behavior: "smooth"
+        var element = document.getElementById(string)
+        element.scrollTo({
+        left: element.scrollLeft - 600,
+        behavior: "smooth"
       })}
+  </script>
+
+  <script>
+      function modalFiller(reviewDict){
+        modalText = document.getElementById('modal-rating-textarea')
+        modalRating = document.getElementById('modal-rating-input')
+        dateVisited = document.getElementById('modal-date-visited')
+        reviewId = document.getElementById('modal-review-id')
+        modalText.value = reviewDict['text']
+        modalRating.value = reviewDict['rating']
+        dateVisited.value = reviewDict['date-visited']
+        reviewId.value = reviewDict['review-id']
+      }
   </script>
 
 </body>

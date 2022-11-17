@@ -1,19 +1,16 @@
 # This file will be used to create our other routes (randomizer page, map page, etc...)
-import json
-
-import requests
-from flask import Blueprint, flash, render_template, request
-from flask_googlemaps import Map
+import requests, json
+from flask import Blueprint, render_template, request, flash
 from flask_login import current_user, login_required
-
-from . import db, simple_geoip
+from flask_googlemaps import Map
 from .auth import get_img_url_with_blob_sas_token
-from .models import Preferences, RecentlyViewed, Reviews
+from .models import Preferences, Reviews, RecentlyViewed
+from . import db, simple_geoip
 
 views = Blueprint('views', __name__)
 
 # Definining the API Key, Search Type, and Header
-MY_API_KEY = 'YELP_API_KEY'
+MY_API_KEY = 'POsgwBET3VXFgJA6YXuddB_zNXaHKTY-qwxAU4v0xUfMaS6vL1BaOdfJbrEJ9LFNNjmoJ15fLdJ2UjPXmt98Pa7tHOwkXmZLPUiBjjpX9RfVeESy8Hl4XT5-4NokY3Yx'
 BUSINESS_SEARCH = 'https://api.yelp.com/v3/businesses/search'
 BUSINESS_DETAILS = 'https://api.yelp.com/v3/businesses/'
 HEADERS = {'Authorization': 'bearer %s' % MY_API_KEY}
@@ -45,11 +42,11 @@ def home():
                                 headers=HEADERS)
         parsed = json.loads(response.text)
         allBusinesses = parsed["businesses"]
-        likedRestaurants = Preferences.query.filter_by(user_id=current_user.id, likes=True).order_by(Preferences.id.desc()).all()    # Simple SQLAlchemy query used to retrieve all of the current user's 'liked' restaurants.
+        likedRestaurants = Preferences.query.filter_by(user_id=current_user.id, likes=True).all()   # Simple SQLAlchemy query used to retrieve all of the current user's 'liked' restaurants.
         return render_template("home.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), trendingBusinesses=trendingBusinesses, allBusinesses=allBusinesses, likedRestaurants=likedRestaurants, location=geoip_data['location']['city'])
 
     else:
-        #geoip_data = simple_geoip.get_geoip_data('137.142.211.54') 
+        #geoip_data = simple_geoip.get_geoip_data('137.142.211.54')  #temp user location
         geoip_data = {'location':{'city':'Plattsburgh'}}
         PARAMETERS = {'location':geoip_data['location']['city'],   
               'radius':2500,
@@ -63,7 +60,7 @@ def home():
         parsed = json.loads(response.text)
         trendingBusinesses = parsed["businesses"]
 
-        PARAMETERS = {'location':geoip_data['location']['city'],   
+        PARAMETERS = {'location':geoip_data['location']['city'],    #temp user location
               'radius':2500,
               'limit': 50,
               'term':'restaurant'
@@ -75,12 +72,42 @@ def home():
         allBusinesses = parsed["businesses"]
         return render_template("home.html", user=current_user, trendingBusinesses=trendingBusinesses, allBusinesses=allBusinesses, location=geoip_data['location']['city'])
 
-@views.route('/locations')
+@views.route('/locations', methods=["GET", "POST"])
 def locations():
+    #geoip_data = simple_geoip.get_geoip_data('137.142.211.54')  #temp user location
+    geoip_data = {'location':{'city':'Plattsburgh'}, 'coordinates':{'latitude':44.693571, 'longitude':-73.4664782}}
+
+    PARAMETERS = {'location':geoip_data['location']['city'], 
+            'radius':2500,
+            'limit': 50,
+            'term':'restaurant'
+            }
+    response = requests.get(url=BUSINESS_SEARCH, 
+                            params=PARAMETERS, 
+                            headers=HEADERS)
+    parsed = json.loads(response.text)
+    allNearbyBusinesses = parsed["businesses"]
+
+    markerArray = []
+    for business in allNearbyBusinesses:
+        markerArray.append({'icon':'http://maps.google.com/mapfiles/ms/icons/red-dot.png', 'lat': business["coordinates"]["latitude"], 'lng':business["coordinates"]["longitude"]})
+
+    nearbyRestaurantsMap = Map(                                                 
+    identifier="nearbyRestaurantsMap",                                         
+    lat=geoip_data['coordinates']['latitude'],                              
+    lng=geoip_data['coordinates']['longitude'],
+    zoom=14, 
+    markers=markerArray,
+    maptype_control=False,                                              
+    streetview_control=False,                                           
+    zoom_control=False,
+    fullscreen_control=False
+    )
+
     if current_user.is_authenticated:
-        return render_template("locations.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
+        return render_template("locations.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), nearbyRestaurantsMap=nearbyRestaurantsMap)
     else:
-        return render_template("locations.html", user=current_user)
+        return render_template("locations.html", user=current_user, nearbyRestaurantsMap=nearbyRestaurantsMap)
 
 @views.route('/questionnaire')
 @login_required
@@ -100,17 +127,17 @@ def restaurant(businessId):
                                 params=PARAMETERS, 
                                 headers=HEADERS)
         parsed = json.loads(response.text)
-        ###########
+        ################################
         newRV = RecentlyViewed(user_id=current_user.id, business_id=businessId, business_name=parsed["name"], business_image_url=parsed["image_url"], business_rating=parsed["rating"], business_rating_count=parsed["review_count"])
         queryRV = RecentlyViewed.query.filter_by(user_id=current_user.id, business_id=businessId).first()
         allRV = RecentlyViewed.query.filter_by(user_id=current_user.id).all()
-        if queryRV:     
-            db.session.delete(queryRV)                              # marking new code so I can comment on it later
+        if queryRV:
+            db.session.delete(queryRV)        
         if len(allRV) > 11:
             db.session.delete(allRV[0])
         db.session.add(newRV)
         db.session.commit()
-        ###########
+        ##################### NEW CODE
         restaurantMap = Map(                                                # This is a Google Map's element which is fed the longitude and latitude data from the 'Business Details' get request       
         identifier="restaurantMap",                                         # in order to display a restaurant's location. 
         lat=parsed["coordinates"]["latitude"],                              # Roughly based on the documentation, linked here: https://pypi.org/project/flask-googlemaps/
@@ -130,7 +157,7 @@ def restaurant(businessId):
         fullscreen_control=False
         )
 
-        allReviews = Reviews.query.filter_by(business_id=businessId).all()      # Retrieving all reviews that match this restaurant's businessId in order to display them on the page.
+        allReviews = Reviews.query.filter_by(business_id=businessId).order_by(Reviews.id.desc()).all()      # Retrieving all reviews that match this restaurant's businessId in order to display them on the page.
         
         if request.method == 'POST':                                            
             if 'like' in request.form:  # This is kind of a mess, but basically, it checks to see if a user has a preference for this restaurant, and then either creates one or alters the old preference based on which button was pressed.
@@ -171,15 +198,29 @@ def restaurant(businessId):
                 elif len(reviewText) < 4:
                     flash('Review cannot be less than 4 characters long!', category='error')
                 else:
-                    newReview = Reviews(user_id=current_user.id, business_id=businessId, username=current_user.username, text=reviewText, date_visited=dateVisited, rating=rating, image=parsed["image_url"], restaurant_name=parsed["name"])
+                    newReview = Reviews(user_id=current_user.id, business_id=businessId, business_name=parsed["name"], business_image_url=parsed["image_url"], username=current_user.username, text=reviewText, date_visited=dateVisited, rating=rating, flags=0)
                     db.session.add(newReview)
                     db.session.commit()
 
                     flash('Review successfully submitted!', category='success')
                     
-                    allReviews = Reviews.query.filter_by(business_id=businessId).all()
+                    allReviews = Reviews.query.filter_by(business_id=businessId).order_by(Reviews.id.desc()).all() 
                     queryPreference = Preferences.query.filter_by(user_id=current_user.id, business_id=businessId).first()
                     return render_template("restaurant.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), preference=queryPreference, business=parsed, restaurantMap=restaurantMap, reviews=allReviews)
+            if 'flag' in request.form:
+                reviewId = request.form.get('reviewId')
+                queryReview = Reviews.query.filter_by(id=reviewId).first()
+                queryReview.flags += 1
+                if(queryReview.flags >= 10):
+                    db.session.delete(queryReview)
+                    flash("This review has been removed due to receiving too many flags. Thank you!", category="success")
+                else:
+                    flash("Review successfully flagged. Thank you!", category="success")
+                db.session.commit()
+
+                allReviews = Reviews.query.filter_by(business_id=businessId).order_by(Reviews.id.desc()).all() 
+                queryPreference = Preferences.query.filter_by(user_id=current_user.id, business_id=businessId).first()
+                return render_template("restaurant.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), preference=queryPreference, business=parsed, restaurantMap=restaurantMap, reviews=allReviews)
 
         queryPreference = Preferences.query.filter_by(user_id=current_user.id, business_id=businessId).first()
         return render_template("restaurant.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), preference=queryPreference, business=parsed, restaurantMap=restaurantMap, reviews=allReviews)
@@ -220,16 +261,66 @@ def recentlyViewed():
     recentlyViewedPages = RecentlyViewed.query.filter_by(user_id=current_user.id).order_by(RecentlyViewed.id.desc()).all()
     return render_template("recently-viewed.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), recentlyViewedPages=recentlyViewedPages)
 
-@views.route('/my-reviews')
+@views.route('/my-reviews', methods=["GET", "POST"])
 @login_required
 def myReviews():
-    #return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
-    if(request.method=='POST'):
-        queryReviewsDesc = Reviews.query.filter_by(user_id=current_user.id).order_by(Reviews.id.desc()).all()
-        return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), reviews=queryReviewsDesc)
+    if request.method == "POST":
+        if 'oldest' in request.form:
+            oldestReviews = Reviews.query.filter_by(user_id=current_user.id).all()
+            lastSort = "oldest"
+            return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), allReviews=oldestReviews, lastSort=lastSort)
+        if 'newest' in request.form:
+            lastSort = "newest"
+            newestReviews = Reviews.query.filter_by(user_id=current_user.id).order_by(Reviews.id.desc()).all()
+            return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), allReviews=newestReviews, lastSort=lastSort)
+        if 'delete' in request.form:
+            reviewId = request.form.get('reviewId')
+            lastSort = request.form.get('lastSort')
+            queryReview = Reviews.query.filter_by(id=reviewId).first()
+            db.session.delete(queryReview)
+            db.session.commit()
+            if(lastSort == "oldest"):
+                lastSort = "oldest"
+                oldestReviews = Reviews.query.filter_by(user_id=current_user.id).all()
+                flash("Review deleted successfully!", category="success")
+                return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), allReviews=oldestReviews, lastSort=lastSort)
+            elif(lastSort == "newest"):
+                lastSort = "newest"
+                newestReviews = Reviews.query.filter_by(user_id=current_user.id).order_by(Reviews.id.desc()).all()
+                flash("Review deleted successfully!", category="success")
+                return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), allReviews=newestReviews, lastSort=lastSort)
+        if 'edit-review' in request.form:
+            reviewText = request.form.get('review')                                                                     
+            dateVisited = request.form.get('date-visited')
+            rating = request.form.get('rating')
+            reviewId = request.form.get('reviewId')
+            lastSort = request.form.get('lastSort')
+            queryReview = Reviews.query.filter_by(id=reviewId).first()
+            if not (queryReview):
+                flash("An error has occured or the review doesn't exist anymore.", category="error")
+            elif len(reviewText) > 120:
+                flash('Review cannot be more than 120 characters long!', category='error')
+            elif len(reviewText) < 4:
+                flash('Review cannot be less than 4 characters long!', category='error')
+            else:
+                queryReview.text = reviewText
+                queryReview.date_visited = dateVisited
+                queryReview.rating = rating
+                db.session.commit()
+                if(lastSort == "oldest"):
+                    lastSort = "oldest"
+                    oldestReviews = Reviews.query.filter_by(user_id=current_user.id).all()
+                    flash("Review updated successfully!", category="success")
+                    return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), allReviews=oldestReviews, lastSort=lastSort)
+                elif(lastSort == "newest"):
+                    lastSort = "newest"
+                    newestReviews = Reviews.query.filter_by(user_id=current_user.id).order_by(Reviews.id.desc()).all()
+                    flash("Review updated successfully!", category="success")
+                    return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), allReviews=newestReviews, lastSort=lastSort)
+            
 
-    queryReviews = Reviews.query.filter_by(user_id=current_user.id).all()
-    return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage)
-, reviews=queryReviews)
+    newestReviews = Reviews.query.filter_by(user_id=current_user.id).order_by(Reviews.id.desc()).all()
+    return render_template("my-reviews.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), allReviews=newestReviews)
+
 
 

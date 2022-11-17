@@ -9,7 +9,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from azure.storage.blob import BlobServiceClient
 from flask_mail import Message
-import secrets #https://blog.miguelgrinberg.com/post/the-new-way-to-generate-secure-tokens-in-python
+import secrets
 import datetime
 from datetime import timedelta
 from .models import User, Token, Reviews
@@ -17,8 +17,7 @@ from . import db, mail
 
 auth = Blueprint('auth', __name__)
 
-
-blob_service = BlobServiceClient.from_connection_string(conn_str="DefaultEndpointsProtocol=https;AccountName=restaurantpicker;AccountKey=o1+G85S7ZbOTXHUboiwVxuZBxYcgh+a1cRJM0ND5ROAGrFlycr0sm3G0/5KnU7CCCVldT+ewd+Tk+ASte+uqYA==;EndpointSuffix=core.windows.net")
+blob_service = BlobServiceClient.from_connection_string(conn_str="AZURE-CONNECTION-STRING")
 
 try:
     container_client = blob_service.get_container_client(container="user-images")  # Connecting to Azure Blob Storage and accessing the container used to store user images
@@ -28,7 +27,8 @@ except Exception as e:                                                          
 
 
 @auth.route('/login', methods=['GET', 'POST'])                                  # Creating the url route for our login page and passing the methods used to access our database. 
-def login():                                                     
+def login():
+    logout_user()                                                     
     if request.method == 'POST':
         if 'login' in request.form:
             email = request.form.get('email')                                       # Gathering the data entered into the login form.
@@ -67,15 +67,16 @@ def login():
 
 @auth.route('/sign-up', methods=['GET', 'POST'])                                    # Creating the url route for our sign-up page and passing the methods used to access our database.
 def signUp():
+    logout_user()  
     if request.method == 'POST':
         email = request.form.get('email')                                           # Gathering the data entered into the login form.
         username = request.form.get('username')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
-        user = User.query.filter_by(email=email).first()                            # Querying our User table to check if an account with this email already exists within our database.
-
-        if user: 
+        queryEmail = User.query.filter_by(email=email).first()                            # Querying our User table to check if an account with this email already exists within our database.
+        
+        if queryEmail: 
             flash('An account with this email already exists!', category='error')   # Series of conditionals used to make sure the columns within our database can store the data entered by a user.
         elif len(email) < 9: 
             flash('Email must be longer than 8 characters.', category='error')
@@ -153,7 +154,7 @@ def account():
 
             if len(newUsername) < 4:                                                                    # Retrieving the username entered into the form, checking to see
                 flash('Username must be longer than 3 characters', category='error')                    # if the new username is acceptable, and then changing the current user's
-            elif len(newUsername) > 19:                                                                 # username and committing the change to the database.
+            elif len(newUsername) > 19:                                                                 # username.
                 flash('Username must be less than 20 characters long.', category='error')
             else:
                 user = User.query.filter_by(id=current_user.id).first()
@@ -242,18 +243,15 @@ def resetPassword(userId, token):
             flash('Password updated successfully!', category='success')
             return redirect(url_for("auth.login"))
     
-    queryUser = User.query.filter_by(id=userId).first()                                                 
-    queryToken =Token.query.filter_by(user_id=queryUser.id).order_by(Token.id.desc()).first()           # Retreiving the user and latest token used in the password recovery process,
-    if queryToken:                                                                                      # checking to see if the token still exists and isn't expired, and then rendering
-        if queryUser and check_password_hash(queryToken.token, token):                                  # the appropriate HTML file based on these conditions.
-            currentTime = datetime.utcnow()
-            expiryTime = queryToken.time_created + timedelta(minutes=2)
-            if currentTime > expiryTime:
-             return render_template("recovery-error.html", user=current_user)
-            else:
-                return render_template("reset-password.html", user=current_user)
-        else:        
+    queryUser = User.query.filter_by(id=userId).first()                                             # Retreiving the user and latest token used in the password recovery process,
+    queryToken =Token.query.filter_by(user_id=queryUser.id).order_by(Token.id.desc()).first()       # checking to see if the token still exists and isn't expired, and then rendering
+    if queryUser and check_password_hash(queryToken.token, token):                                  # the appropriate HTML file based on these conditions.
+        currentTime = datetime.utcnow()
+        expiryTime = queryToken.time_created + timedelta(minutes=2)
+        if currentTime > expiryTime:
             return render_template("recovery-error.html", user=current_user)
+        else:
+            return render_template("reset-password.html", user=current_user)
     else:        
         return render_template("recovery-error.html", user=current_user)
 
@@ -270,13 +268,13 @@ def logout():
 # NOT ORIGINALLY OUR CODE - This code was provided by a very nice man by the name of 'Peter Pan' on Stack Overflow, link provided below:
 # https://stackoverflow.com/questions/59944361/retrieval-and-display-from-azure-blob-storage-to-flask-python-to-html-js
 from datetime import datetime, timedelta
-from azure.storage.blob import generate_container_sas, ContainerSasPermissions
+from azure.storage.blob import ContainerSasPermissions
 
 account_name = "restaurantpicker"
-account_key = "o1+G85S7ZbOTXHUboiwVxuZBxYcgh+a1cRJM0ND5ROAGrFlycr0sm3G0/5KnU7CCCVldT+ewd+Tk+ASte+uqYA=="
+account_key = "AZURE-KEY"
 container_name = "user-images"
 
-from azure.storage.blob import generate_blob_sas, BlobSasPermissions
+from azure.storage.blob import generate_blob_sas
 
 # using generate_blob_sas                                                                                       
 def get_img_url_with_blob_sas_token(blob_name):

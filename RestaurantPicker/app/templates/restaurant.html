@@ -78,6 +78,17 @@
                             {% for review in reviews %}
                             <li class="review">
                                 <p class="body"> {{ review.text }} </p>
+                                {% if current_user.id != review.user_id %}
+                                <div class="review-dropdown">
+                                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="editReviewButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color:{{ user.secondaryColor }}; border-color:{{ user.secondaryColor }}"></button>
+                                    <div class="dropdown-menu review-dropdown-menu" aria-labelledby="editReviewButton">
+                                        <form method="POST">
+                                            <input type="hidden" name="reviewId" id="reviewId" value="{{review.id}}">
+                                            <button name="flag" type="submit"> Flag Review </button>  
+                                        </form>
+                                    </div>
+                                </div>
+                                {% endif %}
                                 <p class="rating"> {{ review.rating }} out of 5 </p>
                                 <h5 class="author"> By: {{ review.username }}, who visited on {{ review.date_visited }}. </h5>
                             </li>

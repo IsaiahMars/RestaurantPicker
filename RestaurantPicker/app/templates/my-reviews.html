@@ -1,26 +1,94 @@
-{% extends "base.html" %} {% block title %} My Reviews {% endblock%}
-<!-- Title block containing page title -->
+{% extends "base.html" %} {% block title %} My Reviews {% endblock%} <!-- Title block containing page title -->
 
-{% block content%}
-<!-- Content block containing header tag -->
-<h1 style="margin-left: 320px">My review </h1>
-<hr st>
-<div class="container">
-    {% for review in reviews %}
-    <div class="container border border-dark">
-        <div class="card  d-flex p-2 flex-row " style="width: 20rem;">
-            <img src="{{review.image}}" class="card-img-top" alt="...">
-            <div class="card-body ">
-                <a href="/restaurant/{{ review.business_id }}"><h2 class="card-title">{{review.restaurant_name}}</h2></a>
-                <h5 class="card-title">{{review.username}}</h5>
-                <p class="card-text">{{review.text}}</p>
-                <p style="color: lightcoral;">Rating:{{review.rating}}</p>
+{% block content%} <!-- Content block containing header tag -->
+    <div class="user-reviews-container">
+        <h2> My Reviews: </h2>
+        <div class="dropdown sortby-dropdown">
+            <button class="btn btn-md btn-secondary dropdown-toggle" type="button" id="sortByButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color:{{ user.secondaryColor }}; border-color:{{ user.secondaryColor }}">
+              Sort By
+            </button>
+            <div class="dropdown-menu sortby-dropdown-menu" aria-labelledby="sortByButton">
+                <form method="POST">
+                    <button name="newest" type="submit"> Newest </button>
+                    <button name="oldest" type="submit"> Oldest </button>
+                </form>
             </div>
         </div>
+        {% if allReviews[0] %}
+            <ul class="user-review-list">
+                {% for review in allReviews %}
+                    <a href="/restaurant/{{ review.business_id }}"><h4>{{ review.business_name }}</h4></a>
+                    <li>
+                        <img src="{{ review.business_image_url }}" alt="Image">
+                        <div>
+                            <p class="body" id="ratingBody{{review.id}}"> {{ review.text }} </p>
+                            <div class="review-dropdown">
+                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="editReviewButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color:{{ user.secondaryColor }}; border-color:{{ user.secondaryColor }}"></button>
+                                <div class="dropdown-menu review-dropdown-menu" aria-labelledby="editReviewButton">
+                                    <form method="POST">
+
+                                        <input type="hidden" name="reviewId" id="reviewId" value="{{review.id}}">
+                                        {% if lastSort %}
+                                            <input type="hidden" name="lastSort" value="{{ lastSort }}">
+                                        {% else %}
+                                            <input type="hidden" name="lastSort" value="newest">
+                                        {% endif %}
+                                        <button type="button" id="editReviewBtn" class="btn btn-primary text-dark" data-toggle="modal" data-target="#editReviewModalCenter" onclick="modalFiller({'text':document.getElementById('ratingBody' + {{ review.id }}).innerHTML, 
+                                                                                                                                                                                                'rating':document.getElementById('ratingText' + {{ review.id }}).getAttribute('value'), 
+                                                                                                                                                                                                'date-visited':document.getElementById('authorText' + {{ review.id }}).getAttribute('value'), 
+                                                                                                                                                                                                'review-id': {{ review.id }}})"> Edit </button>
+                                        <button name="delete" type="submit"> Delete </button>  
+                                    </form>
+                                </div>
+                            </div>
+                            <p class="rating" id="ratingText{{review.id}}" value="{{ review.rating }}"> {{ review.rating }} out of 5 </p>
+                            <h5 class="author" id="authorText{{review.id}}" value="{{ review.date_visited }}"> By: {{ review.username }}, who visited on {{ review.date_visited }}. </h5> 
+                        </div>                
+                        
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h4 class="no-reviews"> You have not written any reviews! </h4>
+        {% endif %}
     </div>
-    <br>
-    {% endfor%}
 
-
-    {% endblock %}
-</div>
+    <!-- Modal -->
+    <!-- https://getbootstrap.com/docs/4.0/components/modal/ -->
+    <div class="modal fade" id="editReviewModalCenter" tabindex="-1" role="dialog" aria-labelledby="editReviewModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editReviewModalTitle"> Edit Review </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="edit-review-modal-body">
+                <form method="POST">
+                    {% if lastSort %}
+                        <input type="hidden" name="lastSort" value="{{ lastSort }}">
+                    {% else %}
+                        <input type="hidden" name="lastSort" value="newest">
+                    {% endif %}
+                    <textarea name="review" id="modal-rating-textarea" value=""></textarea>
+                    <input type="hidden" name="reviewId" id="modal-review-id" value="">
+                    <div class="review-details">
+                        <div class="detail">
+                            <label for="date-visited"> Date Visited: </label>
+                            <input name="date-visited" id="modal-date-visited" type="date" min="2017-01-01" max="2030-1-1" value="2017-01-01"> <!-- this is later changed by the script in base.html -->
+                        </div>
+                        <div class="detail">
+                            <label for="rating"> Rating: </label>
+                            <input name="rating" id="modal-rating-input" type="number" min="0" max="5" step=".1" value="0">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="edit-review" class="btn btn-primary m-auto w-40" style="background-color:{{ user.secondaryColor }}; border-color:{{ user.secondaryColor }}"> Apply Changes </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+{% endblock %}
