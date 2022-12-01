@@ -2,4 +2,65 @@
 
 {% block content%} <!-- Content block containing header tag -->
     <h1>This is the questionnaire page</h1>
+    <form action="form.php">
+        <p>Your email:</p>
+            <input type="text" name ="email" size="15" maxlength="30" />
+        <p>Please put down some comments that can help me improve</p>
+        <textarea name="comments" cols="20" rows="4">Enter your comments...
+        </textarea>
+        <p>What dietary restrictions do you have?<br />
+            <input type="radio" name="dietary_restrictions" value="Lactose_intolerance" checked="checked" /> Lactose intolerance
+        
+            <input type="radio" name="dietary_restrictions" value="Gluten_intolerance" checked="checked" /> Gluten intolerance
+            
+            <input type="radio" name="dietary_restrictions" value="Veganism" checked="checked" /> Veganism
+            
+            <input type="radio" name="dietary_restrictions" value="Dairy-free" checked="checked" /> Dairy-free
+        </p>
+        <p>How many people will be attending with you?<br />
+            <input type="radio" name="numbers" value="one" checked="checked" /> One
+        
+            <input type="radio" name="numbers" value="two" checked="checked" /> Two
+            
+            <input type="radio" name="numbers" value="three" checked="checked" /> Three
+            
+            <input type="radio" name="numbers" value="more_than_four" checked="checked" /> More Than Four
+        </p>
+        <p>How many miles would you be willing to drive?<br />
+            <input type="radio" name="Distance" value="1mile" checked="checked" /> 1 Mile
+        
+            <input type="radio" name="Distance" value="2mile" checked="checked" /> 2 Mile
+            
+            <input type="radio" name="Distance" value="5mile" checked="checked" /> 5 Mile
+            
+            <input type="radio" name="Distance" value="more_than_5" checked="checked" /> More than 5 mile
+        </p>
+        <p>What is your price range?<br />
+            <input type="radio" name="Dollar" value="10-30" checked="checked" /> $10 to $30
+        
+            <input type="radio" name="Dollar" value="50_or_less" checked="checked" /> 50 or less
+            
+            <input type="radio" name="Dollar" value="100_or_less" checked="checked" /> 100 or less
+            
+            <input type="radio" name="Dollar" value="Rich" checked="checked" /> Whatever, I'm rich
+        </p>
+        <p>Type of food you like:<br />
+            <input type="checkbox" name="type of food" value="american" checked="checked" /> American
+        
+            <input type="checkbox" name="type of food" value="chinese" checked="checked" /> Chinese
+            
+            <input type="checkbox" name="type of food" value="japan" checked="checked" /> Japan
+            
+            <input type="checkbox" name="type of food" value="korean" checked="checked" /> Korean
+            
+            <input type="checkbox" name="type of food" value="french" checked="checked" /> French
+            
+            <input type="checkbox" name="type of food" value="italian" checked="checked" /> Italian
+            
+            <input type="checkbox" name="type of food" value="thai" checked="checked" /> Thai
+            
+            <input type="checkbox" name="type of food" value="indian" checked="checked" /> Indian
+        </p>
+        <input type="submit" value="Submit" />
+    </form>
 {% endblock %}
