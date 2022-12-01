@@ -6,11 +6,12 @@ from flask_googlemaps import Map
 from .auth import get_img_url_with_blob_sas_token
 from .models import Preferences, Reviews, RecentlyViewed
 from . import db, simple_geoip
+from os import environ
 
 views = Blueprint('views', __name__)
 
 # Definining the API Key, Search Type, and Header
-MY_API_KEY = 'POsgwBET3VXFgJA6YXuddB_zNXaHKTY-qwxAU4v0xUfMaS6vL1BaOdfJbrEJ9LFNNjmoJ15fLdJ2UjPXmt98Pa7tHOwkXmZLPUiBjjpX9RfVeESy8Hl4XT5-4NokY3Yx'
+MY_API_KEY = environ.get('YELP_API_KEY')
 BUSINESS_SEARCH = 'https://api.yelp.com/v3/businesses/search'
 BUSINESS_DETAILS = 'https://api.yelp.com/v3/businesses/'
 HEADERS = {'Authorization': 'bearer %s' % MY_API_KEY}

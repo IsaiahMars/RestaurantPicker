@@ -4,6 +4,7 @@
 # https://stackoverflow.com/questions/59944361/retrieval-and-display-from-azure-blob-storage-to-flask-python-to-html-js <- very nice man who provided SAS token generator
 
 import os
+from os import environ
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -17,13 +18,12 @@ from . import db, mail
 
 auth = Blueprint('auth', __name__)
 
-blob_service = BlobServiceClient.from_connection_string(conn_str="AZURE-CONNECTION-STRING")
-
+blob_service = BlobServiceClient.from_connection_string(conn_str=environ.get('AZURE_CONN_STR'))
 try:
-    container_client = blob_service.get_container_client(container="user-images")  # Connecting to Azure Blob Storage and accessing the container used to store user images
+    container_client = blob_service.get_container_client(container=environ.get('CONTAINER_NAME'))  # Connecting to Azure Blob Storage and accessing the container used to store user images
     container_client.get_container_properties()                                    # NOT ORIGINALLY OUR CODE - This code was provided by a YouTube channel named Thomas Gauvin
 except Exception as e:                                                             # during a video in which he displays how to use Azure Blob Storage with a Flask app.
-    container_client = blob_service.create_container("user-images")                # https://www.youtube.com/watch?v=wToHU8Hts9c
+    container_client = blob_service.create_container(environ.get('CONTAINER_NAME'))                # https://www.youtube.com/watch?v=wToHU8Hts9c
 
 
 @auth.route('/login', methods=['GET', 'POST'])                                  # Creating the url route for our login page and passing the methods used to access our database. 
@@ -52,7 +52,7 @@ def login():
                 for i in allTokens:                                                         # and then sending it the user.
                     db.session.delete(i)
 
-                message = Message('Reset Password', sender='restaurantpicker123@gmail.com', recipients=[recoveryEmail])
+                message = Message('Reset Password', sender=environ.get('MAIL_USERNAME'), recipients=[recoveryEmail])
                 tempToken = secrets.token_hex(8)
                 newToken = Token(user_id=user.id, token=generate_password_hash(tempToken, method="sha256"), email=recoveryEmail, time_created=datetime.utcnow())
                 db.session.add(newToken)
@@ -61,7 +61,7 @@ def login():
                 mail.send(message)
                 flash('Recovery link sent!', category='success') 
             else:
-                flash('Account with this email does not exist.', category='error') 
+                flash('Account with this email does not exist.', category='error')
 
     return render_template("login.html", user=current_user)
 
@@ -270,9 +270,9 @@ def logout():
 from datetime import datetime, timedelta
 from azure.storage.blob import ContainerSasPermissions
 
-account_name = "restaurantpicker"
-account_key = "AZURE-KEY"
-container_name = "user-images"
+account_name = environ.get('ACCOUNT_NAME')
+account_key = environ.get('ACCOUNT_KEY')
+container_name = environ.get('CONTAINER_NAME')
 
 from azure.storage.blob import generate_blob_sas
 
