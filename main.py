@@ -2,9 +2,10 @@ from app import createApp
 from waitress import serve
 from os import environ
 import os
-from dotenv import load_dotenv
+import dotenv
+
 project_folder = os.path.expanduser('~/RestaurantPicker')  # adjust as appropriate
-load_dotenv(os.path.join(project_folder, '.env'))
+dotenv.load_dotenv(os.path.join(project_folder, '.env'))
 
 
 app = createApp()
