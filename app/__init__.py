@@ -22,7 +22,7 @@ simple_geoip = SimpleGeoIP()
 def createApp():
     app = Flask(__name__)       
     app.config['SECRET_KEY'] = environ.get('SECRET_KEY')                                                                    # Creating our Flask app object and establishing a connection to MySQL server.
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_ADDRESS}/{DB_NAME}'       # 'pymysql' is injected into the uri here to allow us to access MySQL databases with SQLAlchemy code.
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{DB_USER}:{DB_PASSWORD}@{DB_ADDRESS}/{DB_NAME}'       # 'pymysql' is injected into the uri here to allow us to access MySQL databases with SQLAlchemy code.
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False                                                            # Disabling 'Track Modifications' reduces significant overhead.
     db.init_app(app)
 
