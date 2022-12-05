@@ -27,7 +27,7 @@ def createApp():
     db.init_app(app)
 
     app.config['MAIL_SERVER']='smtp.gmail.com'                                  
-    app.config['MAIL_PORT'] = environ.get('MAIL_PORT')                                                   # Configuring Flask-Mail API as per documentation requirements, linked below:
+    app.config['MAIL_PORT'] = int(environ.get('MAIL_PORT'))                                                 # Configuring Flask-Mail API as per documentation requirements, linked below:
     app.config['MAIL_USERNAME'] = environ.get('MAIL_USERNAME')                   # https://pythonhosted.org/Flask-Mail/
     app.config['MAIL_PASSWORD'] = environ.get('MAIL_PASSWORD') 
     app.config['MAIL_USE_TLS'] = False
