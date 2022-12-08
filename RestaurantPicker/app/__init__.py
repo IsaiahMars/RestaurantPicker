@@ -7,10 +7,10 @@ from flask_googlemaps import GoogleMaps
 from flask_simple_geoip import SimpleGeoIP
 
 db = SQLAlchemy()                  # Creating the SQLAlchemy class object used to integrate our database into our project
-DB_NAME = 'restaurantpickerdb'     # Currently, this project requires you to have an existing database hosted locally on your PC.
-DB_ADDRESS = '127.0.0.1'           # You must replace these variables here with the information of said database to establish a connection.
+DB_NAME = 'restaurantpicker'     # Currently, this project requires you to have an existing database hosted locally on your PC.
+DB_ADDRESS = 'localhost'           # You must replace these variables here with the information of said database to establish a connection.
 DB_USER = 'root'
-DB_PASSWORD = 'steamyhams123'
+DB_PASSWORD = 'burger12345'
 
 mail = Mail()
 
