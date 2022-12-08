@@ -1,66 +1,410 @@
 {% extends "base.html" %} {% block title %} Questionnaire {% endblock%} <!-- Title block containing page title -->
 
 {% block content%} <!-- Content block containing header tag -->
-    <h1>This is the questionnaire page</h1>
-    <form action="form.php">
-        <p>Your email:</p>
-            <input type="text" name ="email" size="15" maxlength="30" />
-        <p>Please put down some comments that can help me improve</p>
-        <textarea name="comments" cols="20" rows="4">Enter your comments...
-        </textarea>
-        <p>What dietary restrictions do you have?<br />
-            <input type="radio" name="dietary_restrictions" value="Lactose_intolerance" checked="checked" /> Lactose intolerance
-        
-            <input type="radio" name="dietary_restrictions" value="Gluten_intolerance" checked="checked" /> Gluten intolerance
+<body>
+    <div class="questionnaire-container" >
+        <form method="POST" id="questionnaire-form">
+            <div class="question-container">
+                <h4> Which cuisines do you prefer? </h4>
+                <h6> (Select any that apply) </h6>
+                <div class="response-container">
+                    <input type="checkbox" id="response-african" name="regional-response" value="[&#34;response-african&#34;, &#34;african&#34;]">
+                    <label for="response-african"> African </label>
+
+                    <input type="checkbox" id="response-afghan" name="regional-response" value="[&#34;response-afghan&#34;, &#34;afghani&#34;]">
+                    <label for="response-afghan"> Afghan </label>
+
+                    <input type="checkbox" id="response-american-new" name="regional-response" value="[&#34;response-american-new&#34;, &#34;newamerican&#34;]">
+                    <label for="response-american-new"> American (New) </label>
+
+                    <input type="checkbox" id="response-american-trad" name="regional-response" value="[&#34;response-american-trad&#34;, &#34;tradamerican&#34;]">
+                    <label for="response-american-trad"> American (Traditional) </label>
+
+                    <input type="checkbox" id="response-arabic" name="regional-response" value="[&#34;response-arabic&#34;, &#34;arabian&#34;]">
+                    <label for="response-arabic"> Arabic </label>
+
+                    <input type="checkbox" id="response-argentine" name="regional-response" value="[&#34;response-argentine&#34;, &#34;argentine&#34;]">
+                    <label for="response-argentine"> Argentine </label>
+
+                    <input type="checkbox" id="response-armenian" name="regional-response" value="[&#34;response-armenian&#34;, &#34;armenian&#34;]">
+                    <label for="response-armenian"> Armenian </label>
+
+                    <input type="checkbox" id="response-australian" name="regional-response" value="[&#34;response-australian&#34;, &#34;australian&#34;]">
+                    <label for="response-australian"> Australian </label>
+
+                    <input type="checkbox" id="response-belgian" name="regional-response" value="[&#34;response-belgian&#34;, &#34;belgian&#34;]">
+                    <label for="response-belgian"> Belgian </label>
+
+                    <input type="checkbox" id="response-brazilian" name="regional-response" value="[&#34;response-brazilian&#34;, &#34;brazilian&#34;]">
+                    <label for="response-brazilian"> Brazilian </label>
+
+                    <input type="checkbox" id="response-british" name="regional-response" value="[&#34;response-british&#34;, &#34;british&#34;]">
+                    <label for="response-british"> British </label>
+
+                    <input type="checkbox" id="response-bulgarian" name="regional-response" value="[&#34;response-bulgarian&#34;, &#34;bulgarian&#34;]">
+                    <label for="response-bulgarian"> Bulgarian </label>
+
+                    <input type="checkbox" id="response-cajun-creole" name="regional-response" value="[&#34;response-cajun-creole&#34;, &#34;cajun&#34;]">
+                    <label for="response-cajun-creole"> Cajun/Creole </label>
+
+                    <input type="checkbox" id="response-canadian" name="regional-response" value="[&#34;response-canadian&#34;, &#34;newcanadian&#34;]">
+                    <label for="response-canadian"> Canadian </label>
+
+                    <input type="checkbox" id="response-caribbean" name="regional-response" value="[&#34;response-caribbean&#34;, &#34;caribbean&#34;]">
+                    <label for="response-caribbean"> Caribbean </label>
+
+                    <input type="checkbox" id="response-chilean" name="regional-response" value="[&#34;response-chilean&#34;, &#34;chilean&#34;]">
+                    <label for="response-chilean"> Chilean </label>
+
+                    <input type="checkbox" id="response-chinese" name="regional-response" value="[&#34;response-chinese&#34;, &#34;chinese&#34;]">
+                    <label for="response-chinese"> Chinese </label>
+
+                    <input type="checkbox" id="response-cuban" name="regional-response" value="[&#34;response-cuban&#34;, &#34;cuban&#34;]">
+                    <label for="response-cuban"> Cuban </label>
+
+                    <input type="checkbox" id="response-czech" name="regional-response" value="[&#34;response-czech&#34;, &#34;czech&#34;]">
+                    <label for="response-czech"> Czech </label>
+
+                    <input type="checkbox" id="response-danish" name="regional-response" value="[&#34;response-danish&#34;, &#34;danish&#34;]">
+                    <label for="response-danish"> Danish </label>
+
+                    <input type="checkbox" id="response-ethiopian" name="regional-response" value="[&#34;response-ethiopian&#34;, &#34;ethiopian&#34;]">
+                    <label for="response-ethiopian"> Ethiopian </label>
+
+                    <input type="checkbox" id="response-filipino" name="regional-response" value="[&#34;response-filipino&#34;, &#34;filipino&#34;]">
+                    <label for="response-filipino"> Filipino </label>
+
+                    <input type="checkbox" id="response-french" name="regional-response" value="[&#34;response-french&#34;, &#34;french&#34;]">
+                    <label for="response-french"> French </label>
+
+                    <input type="checkbox" id="response-german" name="regional-response" value="[&#34;response-german&#34;, &#34;german&#34;]">
+                    <label for="response-german"> German </label>
+
+                    <input type="checkbox" id="response-greek" name="regional-response" value="[&#34;response-greek&#34;, &#34;greek&#34;]">
+                    <label for="response-greek"> Greek </label>
+                    
+                    <input type="checkbox" id="response-honduran" name="regional-response" value="[&#34;response-honduran&#34;, &#34;honduran&#34;]">
+                    <label for="response-honduran"> Honduran </label>
+
+                    <input type="checkbox" id="response-hungarian" name="regional-response" value="[&#34;response-hungarian&#34;, &#34;hungarian&#34;]">
+                    <label for="response-hungarian"> Hungarian </label>
+
+                    <input type="checkbox" id="response-indian" name="regional-response" value="[&#34;response-indian&#34;, &#34;indpak&#34;]">
+                    <label for="response-indian"> Indian </label>
+
+                    <input type="checkbox" id="response-indonesian" name="regional-response" value="[&#34;response-indonesian&#34;, &#34;indonesian&#34;]">
+                    <label for="response-indonesian"> Indonesian </label>
+
+                    <input type="checkbox" id="response-irish" name="regional-response" value="[&#34;response-irish&#34;, &#34;irish&#34;]">
+                    <label for="response-irish"> Irish </label>
+
+                    <input type="checkbox" id="response-israeli" name="regional-response" value="[&#34;response-israeli&#34;, &#34;israeli&#34;]">
+                    <label for="response-israeli"> Israeli </label>
+
+                    <input type="checkbox" id="response-italian" name="regional-response" value="[&#34;response-italian&#34;, &#34;italian&#34;]">
+                    <label for="response-italian"> Italian </label>
+
+                    <input type="checkbox" id="response-japanese" name="regional-response" value="[&#34;response-japanese&#34;, &#34;japanese&#34;]">
+                    <label for="response-japanese"> Japanese </label>
+
+                    <input type="checkbox" id="response-korean" name="regional-response" value="[&#34;response-korean&#34;, &#34;korean&#34;]">
+                    <label for="response-korean"> Korean </label>
+
+                    <input type="checkbox" id="response-latin-american" name="regional-response" value="[&#34;response-latin&#34;, &#34;latin&#34;]">
+                    <label for="response-latin-american"> Latin American </label>
+
+                    <input type="checkbox" id="response-mediterranean" name="regional-response" value="[&#34;response-mediterranean&#34;, &#34;mediterranean&#34;]">
+                    <label for="response-mediterranean"> Mediterranean </label>
+
+                    <input type="checkbox" id="response-mexican" name="regional-response" value="[&#34;response-mexican&#34;, &#34;mexican&#34;]">
+                    <label for="response-mexican"> Mexican </label>
+
+                    <input type="checkbox" id="response-middle-eastern" name="regional-response" value="[&#34;response-middle-eastern&#34;, &#34;mideastern&#34;]">
+                    <label for="response-middle-eastern"> Middle Eastern </label>
+
+                    <input type="checkbox" id="response-mongolian" name="regional-response" value="[&#34;response-mongolian&#34;, &#34;mongolian&#34;]">
+                    <label for="response-mongolian"> Mongolian </label>
+
+                    <input type="checkbox" id="response-moroccan" name="regional-response" value="[&#34;response-moroccan&#34;, &#34;moroccan&#34;]">
+                    <label for="response-moroccan"> Moroccan </label>
+
+                    <input type="checkbox" id="response-pakistani" name="regional-response" value="[&#34;response-pakistani&#34;, &#34;pakistani&#34;]">
+                    <label for="response-pakistani"> Pakistani </label>
+
+                    <input type="checkbox" id="response-peruvian" name="regional-response" value="[&#34;response-peruvian&#34;, &#34;peruvian&#34;]">
+                    <label for="response-peruvian"> Peruvian </label>
+
+                    <input type="checkbox" id="response-polish" name="regional-response" value="[&#34;response-polish&#34;, &#34;polish&#34;]">
+                    <label for="response-polish"> Polish </label>
+
+                    <input type="checkbox" id="response-portuguese" name="regional-response" value="[&#34;response-portuguese&#34;, &#34;portuguese&#34;]">
+                    <label for="response-portuguese"> Portuguese </label>
+
+                    <input type="checkbox" id="response-romanian" name="regional-response" value="[&#34;response-romanian&#34;, &#34;romanian&#34;]">
+                    <label for="response-romanian"> Romanian </label>
+
+                    <input type="checkbox" id="response-russian" name="regional-response" value="[&#34;response-russian&#34;, &#34;russian&#34;]">
+                    <label for="response-russian"> Russian </label>
+
+                    <input type="checkbox" id="response-scandanavian" name="regional-response" value="[&#34;response-scandanavian&#34;, &#34;scandanavian&#34;]">
+                    <label for="response-scandanavian"> Scandanavian </label>
+
+                    <input type="checkbox" id="response-scottish" name="regional-response" value="[&#34;response-scottish&#34;, &#34;scottish&#34;]">
+                    <label for="response-scottish"> Scottish </label>
+
+                    <input type="checkbox" id="response-singaporean" name="regional-response" value="[&#34;response-singaporean&#34;, &#34;singaporean&#34;]">
+                    <label for="response-singaporean"> Singaporean </label>
+
+                    <input type="checkbox" id="response-slovakian" name="regional-response" value="[&#34;response-slovakian&#34;, &#34;slovakian&#34;]">
+                    <label for="response-slovakian"> Slovakian </label>
+
+                    <input type="checkbox" id="response-somali" name="regional-response" value="[&#34;response-somali&#34;, &#34;somali&#34;]">
+                    <label for="response-somali"> Somali </label>
+
+                    <input type="checkbox" id="response-spanish" name="regional-response" value="[&#34;response-spanish&#34;, &#34;spanish&#34;]">
+                    <label for="response-spanish"> Spanish </label>
+
+                    <input type="checkbox" id="response-sri-lankan" name="regional-response" value="[&#34;response-sri-lankan&#34;, &#34;srilankan&#34;]">
+                    <label for="response-sri-lankan"> Sri-Lankan </label>
+
+                    <input type="checkbox" id="response-swedish" name="regional-response" value="[&#34;response-swedish&#34;, &#34;swedish&#34;]">
+                    <label for="response-swedish"> Swedish </label>
+
+                    <input type="checkbox" id="response-thai" name="regional-response" value="[&#34;response-thai&#34;, &#34;thai&#34;]">
+                    <label for="response-thai"> Thai </label>
+
+                    <input type="checkbox" id="response-turkish" name="regional-response" value="[&#34;response-turkish&#34;, &#34;turkish&#34;]">
+                    <label for="response-turkish"> Turkish </label>
+
+                    <input type="checkbox" id="response-ukranian" name="regional-response" value="[&#34;response-ukranian&#34;, &#34;ukranian&#34;]">
+                    <label for="response-ukranian"> Ukranian </label>
+
+                    <input type="checkbox" id="response-vietnamese" name="regional-response" value="[&#34;response-vietnamese&#34;, &#34;vietnamese&#34;]">
+                    <label for="response-vietnamese"> Vietnamese </label>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <h4> Which kinds of food do you prefer? </h4>
+                <h6> (Select any that apply) </h6>
+                <div class="response-container">
+                    <input type="checkbox" id="response-asian-fusion" name="foodtype-response" value="[&#34;response-asian-fusion&#34;, &#34;asianfusion&#34;]">
+                    <label for="response-asian-fusion"> Asian Fusion </label>
+
+                    <input type="checkbox" id="response-baguettes" name="foodtype-response" value="[&#34;response-baguettes&#34;, &#34;baguettes&#34;]">
+                    <label for="response-baguettes"> Baguettes </label>
+
+                    <input type="checkbox" id="response-barbeque" name="foodtype-response" value="[&#34;response-barbeque&#34;, &#34;barbeque&#34;]">
+                    <label for="response-barbeque"> Barbeque </label>
+
+                    <input type="checkbox" id="response-burgers" name="foodtype-response" value="[&#34;response-burgers&#34;, &#34;burgers&#34;]">
+                    <label for="response-burgers"> Burgers </label>
+
+                    <input type="checkbox" id="response-breakfast-brunch" name="foodtype-response" value="[&#34;response-breakfast-brunch&#34;, &#34;breakfast_brunch&#34;]">
+                    <label for="response-breakfast-brunch"> Breakfast & Brunch </label>
+
+                    <input type="checkbox" id="response-cheesesteaks" name="foodtype-response" value="[&#34;response-cheesesteaks&#34;, &#34;cheesesteaks&#34;]">
+                    <label for="response-cheesesteaks"> Cheesesteaks </label>
+
+                    <input type="checkbox" id="response-chicken-wings" name="foodtype-response" value="[&#34;response-chicken-wings&#34;, &#34;chicken_wings&#34;]">
+                    <label for="response-chicken-wings"> Chicken Wings </label>
+
+                    <input type="checkbox" id="response-comfort-food" name="foodtype-response" value="[&#34;response-comfort-food&#34;, &#34;comfortfood&#34;]">
+                    <label for="response-comfort-food"> Comfort Food </label>
+
+                    <input type="checkbox" id="response-dumplings" name="foodtype-response" value="[&#34;response-dumplings&#34;, &#34;dumplings&#34;]">
+                    <label for="response-dumplings"> Dumplings </label>
+
+                    <input type="checkbox" id="response-fish-chips" name="foodtype-response" value="[&#34;response-fish-chips&#34;, &#34;fishnchips&#34;]">
+                    <label for="response-fish-chips"> Fish & Chips </label>
+
+                    <input type="checkbox" id="response-hot-dogs" name="foodtype-response" value="[&#34;response-hot-dogs&#34;, &#34;hotdog&#34;]">
+                    <label for="response-hot-dogs"> Hot Dogs </label>
+
+                    <input type="checkbox" id="response-kebab" name="foodtype-response" value="[&#34;response-kebab&#34;, &#34;kebab&#34;]">
+                    <label for="response-kebab"> Kebab </label>
+
+                    <input type="checkbox" id="response-meatballs" name="foodtype-response" value="[&#34;response-meatballs&#34;, &#34;meatballs&#34;]">
+                    <label for="response-meatballs"> Meatballs </label>
+
+                    <input type="checkbox" id="response-tacos" name="foodtype-response" value="[&#34;response-tacos&#34;, &#34;tacos&#34;]">
+                    <label for="response-tacos"> Tacos </label>
+
+                    <input type="checkbox" id="response-tamales" name="foodtype-response" value="[&#34;response-tamales&#34;, &#34;tamales&#34;]">
+                    <label for="response-tamales"> Tamales </label>
+
+                    <input type="checkbox" id="response-night-food" name="foodtype-response" value="[&#34;response-night-food&#34;, &#34;nightfood&#34;]">
+                    <label for="response-night-food"> Night Food </label>
+
+                    <input type="checkbox" id="response-noodles" name="foodtype-response" value="[&#34;response-noodles&#34;, &#34;noodles&#34;]">
+                    <label for="response-noodles"> Noodles </label>
+
+                    <input type="checkbox" id="response-open-sandwiches" name="foodtype-response" value="[&#34;response-open-sandwiches&#34;, &#34;opensandwiches&#34;]">
+                    <label for="response-open-sandwiches"> Open Sandwiches </label>
+
+                    <input type="checkbox" id="response-pierogis" name="foodtype-response" value="[&#34;response-pierogis&#34;, &#34;pierogis&#34;]">
+                    <label for="response-pierogis"> Pierogis </label>
+
+                    <input type="checkbox" id="response-pizza" name="foodtype-response" value="[&#34;response-pizza&#34;, &#34;pizza&#34;]">
+                    <label for="response-pizza"> Pizza </label>
+
+                    <input type="checkbox" id="response-salad" name="foodtype-response" value="[&#34;response-salad&#34;, &#34;salad&#34;]">
+                    <label for="response-salad"> Salad </label>
+
+                    <input type="checkbox" id="response-sandwiches" name="foodtype-response" value="[&#34;response-sandwiches&#34;, &#34;sandwiches&#34;]">
+                    <label for="response-sandwiches"> Sandwiches </label>
+
+                    <input type="checkbox" id="response-seafood" name="foodtype-response" value="[&#34;response-seafood&#34;, &#34;seafood&#34;]">
+                    <label for="response-seafood"> Seafood </label>
+
+                    <input type="checkbox" id="response-soup" name="foodtype-response" value="[&#34;response-soup&#34;, &#34;soup&#34;]">
+                    <label for="response-soup"> Soup </label>
+
+                    <input type="checkbox" id="response-tex-mex" name="foodtype-response" value="[&#34;response-tex-mex&#34;, &#34;tex-mex&#34;]">
+                    <label for="response-tex-mex"> Tex-Mex </label>
+
+                    <input type="checkbox" id="response-waffles" name="foodtype-response" value="[&#34;response-waffles&#34;, &#34;waffles&#34;]">
+                    <label for="response-waffles"> Waffles </label>
+
+                    <input type="checkbox" id="response-wok" name="foodtype-response" value="[&#34;response-wok&#34;, &#34;wok&#34;]">
+                    <label for="response-wok"> Wok </label>
+
+                    <input type="checkbox" id="response-wraps" name="foodtype-response" value="[&#34;response-wraps&#34;, &#34;wraps&#34;]">
+                    <label for="response-wraps"> Wraps </label>
+                </div>
+            </div>
             
-            <input type="radio" name="dietary_restrictions" value="Veganism" checked="checked" /> Veganism
-            
-            <input type="radio" name="dietary_restrictions" value="Dairy-free" checked="checked" /> Dairy-free
-        </p>
-        <p>How many people will be attending with you?<br />
-            <input type="radio" name="numbers" value="one" checked="checked" /> One
-        
-            <input type="radio" name="numbers" value="two" checked="checked" /> Two
-            
-            <input type="radio" name="numbers" value="three" checked="checked" /> Three
-            
-            <input type="radio" name="numbers" value="more_than_four" checked="checked" /> More Than Four
-        </p>
-        <p>How many miles would you be willing to drive?<br />
-            <input type="radio" name="Distance" value="1mile" checked="checked" /> 1 Mile
-        
-            <input type="radio" name="Distance" value="2mile" checked="checked" /> 2 Mile
-            
-            <input type="radio" name="Distance" value="5mile" checked="checked" /> 5 Mile
-            
-            <input type="radio" name="Distance" value="more_than_5" checked="checked" /> More than 5 mile
-        </p>
-        <p>What is your price range?<br />
-            <input type="radio" name="Dollar" value="10-30" checked="checked" /> $10 to $30
-        
-            <input type="radio" name="Dollar" value="50_or_less" checked="checked" /> 50 or less
-            
-            <input type="radio" name="Dollar" value="100_or_less" checked="checked" /> 100 or less
-            
-            <input type="radio" name="Dollar" value="Rich" checked="checked" /> Whatever, I'm rich
-        </p>
-        <p>Type of food you like:<br />
-            <input type="checkbox" name="type of food" value="american" checked="checked" /> American
-        
-            <input type="checkbox" name="type of food" value="chinese" checked="checked" /> Chinese
-            
-            <input type="checkbox" name="type of food" value="japan" checked="checked" /> Japan
-            
-            <input type="checkbox" name="type of food" value="korean" checked="checked" /> Korean
-            
-            <input type="checkbox" name="type of food" value="french" checked="checked" /> French
-            
-            <input type="checkbox" name="type of food" value="italian" checked="checked" /> Italian
-            
-            <input type="checkbox" name="type of food" value="thai" checked="checked" /> Thai
-            
-            <input type="checkbox" name="type of food" value="indian" checked="checked" /> Indian
-        </p>
-        <input type="submit" value="Submit" />
-    </form>
+            <div class="question-container">
+                <h4> Which restaurant styles do you prefer? </h4>
+                <h6> (Select any that apply) </h6>
+                <div class="response-container">
+                    <input type="checkbox" id="response-bistros" name="restaurantstyle-response" value="[&#34;response-bistros&#34;, &#34;bistros&#34;]">
+                    <label for="response-bistros"> Bistro </label>
+
+                    <input type="checkbox" id="response-buffets" name="restaurantstyle-response" value="[&#34;response-buffets&#34;, &#34;buffets&#34;]">
+                    <label for="response-buffets"> Buffet </label>
+
+                    <input type="checkbox" id="response-cafes" name="restaurantstyle-response" value="[&#34;response-cafes&#34;, &#34;cafes&#34;]">
+                    <label for="response-cafes"> Cafe </label>
+
+                    <input type="checkbox" id="response-cafeteria" name="restaurantstyle-response" value="[&#34;response-cafeteria&#34;, &#34;cafeteria&#34;]">
+                    <label for="response-cafeteria"> Cafeteria </label>
+
+                    <input type="checkbox" id="response-canteen" name="restaurantstyle-response" value="[&#34;response-canteen&#34;, &#34;canteen&#34;]">
+                    <label for="response-canteen"> Canteen </label>
+
+                    <input type="checkbox" id="response-delis" name="restaurantstyle-response" value="[&#34;response-delis&#34;, &#34;delis&#34;]">
+                    <label for="response-delis"> Deli </label>
+
+                    <input type="checkbox" id="response-diners" name="restaurantstyle-response" value="[&#34;response-diners&#34;, &#34;diners&#34;]">
+                    <label for="response-diners"> Diner </label>
+
+                    <input type="checkbox" id="response-dinner-theater" name="restaurantstyle-response" value="[&#34;response-dinner-theater&#34;, &#34;dinnertheater&#34;]">
+                    <label for="response-dinner-theater"> Dinner Theater </label>
+
+                    <input type="checkbox" id="response-fast-food" name="restaurantstyle-response" value="[&#34;response-fast-food&#34;, &#34;hotdogs&#34;]">
+                    <label for="response-fast-food"> Fast Food </label>
+
+                    <input type="checkbox" id="response-food-court" name="restaurantstyle-response" value="[&#34;response-food-court&#34;, &#34;food_court&#34;]">
+                    <label for="response-food-court"> Food Court </label>
+
+                    <input type="checkbox" id="response-food-stands" name="restaurantstyle-response" value="[&#34;response-food-stands&#34;, &#34;foodstands&#34;]">
+                    <label for="response-food-stands"> Food Stand </label>
+
+                    <input type="checkbox" id="response-popup-restaurants" name="restaurantstyle-response" value="[&#34;response-popup-restaurants&#34;, &#34;popuprestaurants&#34;]">
+                    <label for="response-popup-restaurants"> Pop-Up Restaurant </label>
+
+                    <input type="checkbox" id="response-steakhouses" name="restaurantstyle-response" value="[&#34;response-steakhouses&#34;, &#34;steak&#34;]">
+                    <label for="response-steakhouses"> Steakhouse </label>
+
+                    <input type="checkbox" id="response-sushi-bars" name="restaurantstyle-response" value="[&#34;response-sushi-bars&#34;, &#34;sushi&#34;]">
+                    <label for="response-sushi-bars"> Sushi Bar </label>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <h4> What&#34;s your desired price range? </h4>
+                <h6> (Select one) </h6>
+                <div class="response-container">
+                    <input type="radio" id="response-price1" name="price-response" value="[&#34;response-price1&#34;, [1]]">
+                    <label for="response-price1"> Cheap </label>
+
+                    <input type="radio" id="response-price2" name="price-response" value="[&#34;response-price2&#34;, [1,2]]">
+                    <label for="response-price2"> Average </label>
+
+                    <input type="radio" id="response-price3" name="price-response" value="[&#34;response-price3&#34;, [2,3]]">
+                    <label for="response-price3"> Pricey </label>
+
+                    <input type="radio" id="response-price4" name="price-response" value="[&#34;response-price4&#34;, [3,4]]">
+                    <label for="response-price4"> Expensive </label>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <h4> Any dietary restrictions we should know about? </h4>
+                <h6> (Select any that apply) </h6>
+                <div class="response-container">
+                    <input type="checkbox" id="response-vegan" name="dietary-response" value="[&#34;response-vegan&#34;, &#34;vegan&#34;]">
+                    <label for="response-vegan"> Vegan </label>
+
+                    <input type="checkbox" id="response-vegetarian" name="dietary-response" value="[&#34;response-vegetarian&#34;, &#34;vegetarian&#34;]">
+                    <label for="response-vegetarian"> Vegetarian </label>
+
+                    <input type="checkbox" id="response-gluten-free" name="dietary-response" value="[&#34;response-gluten-free&#34;, &#34;gluten-free&#34;]">
+                    <label for="response-gluten-free"> Gluten Free </label>
+
+                    <input type="checkbox" id="response-halal" name="dietary-response" value="[&#34;response-halal&#34;, &#34;halal&#34;]">
+                    <label for="response-halal"> Halal </label>
+
+                    <input type="checkbox" id="response-kosher" name="dietary-response" value="[&#34;response-kosher&#34;, &#34;kosher&#34;]">
+                    <label for="response-kosher"> Kosher </label>
+
+                    <input type="checkbox" id="response-raw-food" name="dietary-response" value="[&#34;response-raw-food&#34;, &#34;rawfood&#34;]">
+                    <label for="response-raw-food"> Raw Food </label>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <h4> Lastly, any accessibility accomodations? </h4>
+                <h6> (Select any that apply) </h6>
+                <div class="response-container">
+                    <input type="checkbox" id="response-wheelchair-accessible" name="accessibility-response" value="[&#34;response-wheelchair-accessible&#34;, &#34;wheelchair_accessible&#34;]">
+                    <label for="response-wheelchair-accessible"> Wheelchair Accessible </label>
+
+                    <input type="checkbox" id="response-gender-neutral-restrooms" name="accessibility-response" value="[&#34;response-gender-neutral-restrooms&#34;, &#34;gender_neutral_restrooms&#34;]">
+                    <label for="response-gender-neutral-restrooms"> Gender Neutral Bathrooms </label>
+
+                    <input type="checkbox" id="response-open-to-all" name="accessibility-response" value="[&#34;response-open-to-all&#34;, &#34;open_to_all&#34;]">
+                    <label for="response-open-to-all"> Open To All </label>
+                </div>
+            </div>
+
+            <div class="questionnaire-buttons">
+                <button id="questionnaire-clear" type="reset"> Clear </button>
+                <button type="submit" name="questionnaire-submit" class="questionnaire-submit"> Save </button>
+            </div>
+        </form>
+    </div>
+</body>
+<style>
+    .questionnaire-container .question-container .response-container label {
+        background-color: {{ user.secondaryColor }};
+        border-color:{{ user.secondaryColor }}; 
+    }
+
+    .questionnaire-container .question-container .response-container input:checked + label {
+        background-color:{{ user.primaryColor }};
+        border-color:{{ user.primaryColor }};   
+    }
+
+    .questionnaire-container .questionnaire-buttons #questionnaire-clear{
+        background-color: {{ user.secondaryColor }};
+        border-color:{{ user.secondaryColor }};
+    }
+
+    .questionnaire-container .questionnaire-buttons .questionnaire-submit{
+        background-color:{{ user.primaryColor }};
+        border-color:{{ user.primaryColor }}; 
+    }
+</style>
 {% endblock %}
