@@ -109,10 +109,32 @@ def locations():
     else:
         return render_template("locations.html", user=current_user, nearbyRestaurantsMap=nearbyRestaurantsMap)
 
-@views.route('/questionnaire')
+@views.route('/questionnaire', methods=["GET","POST"])
 @login_required
 def questionnaire():
-    return render_template("questionnaire.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
+    if request.method == "POST":
+        if "questionnaire-submit" in request.form:
+            responseDict = {'regional-response':request.form.getlist('regional-response'), 
+                            'foodtype-response':request.form.getlist('foodtype-response'), 
+                            'restaurantstyle-response':request.form.getlist('restaurantstyle-response'),
+                            'price-response':request.form.getlist('price-response'),
+                            'dietary-response':request.form.getlist('dietary-response'),
+                            'accessibility-response':request.form.getlist('accessibility-response')}
+            queryResponses = QuestionnaireResponse.query.filter_by(user_id=current_user.id).all()
+            for response in queryResponses:
+                db.session.delete(response)
+            for key in responseDict:
+                for response in responseDict[key]:
+                        newResponse = QuestionnaireResponse(user_id=current_user.id, response_type=key, responses=response)
+                        db.session.add(newResponse)
+            db.session.commit()
+            flash('Questionnaire responses updated successfully!', category='success')
+            return redirect(url_for("views.home"))
+    queryResponses = QuestionnaireResponse.query.filter_by(user_id=current_user.id).all()
+    questionnaireResponses = []
+    for response in queryResponses:
+        questionnaireResponses.append([response.response_type, response.responses])
+    return render_template("questionnaire.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage), questionnaireResponses=questionnaireResponses)
 
 @views.route('/randomizer')
 @login_required

@@ -15,6 +15,7 @@ class User(db.Model, UserMixin):
     preferences = db.relationship('Preferences')
     reviews = db.relationship('Reviews')
     recentlyviewed = db.relationship('RecentlyViewed')
+    questionnaireresponse = db.relationship('QuestionnaireResponse')
 
 class Token(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -55,3 +56,11 @@ class RecentlyViewed(db.Model):
     business_image_url = db.Column(db.String(100))
     business_rating = db.Column(db.Float)
     business_rating_count = db.Column(db.Integer)
+class QuestionnaireResponse(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    response_type = db.Column(db.String(30))
+    responses = db.Column(db.Text(1000))
+
+    
+    
