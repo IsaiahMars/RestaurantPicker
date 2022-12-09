@@ -1,5 +1,180 @@
-{% extends "base.html" %} {% block title %} Randomizer {% endblock%} <!-- Title block containing page title -->
+{% extends "base.html" %}
+{% block title %} Randomizer {% endblock%}
+<!-- Title block containing page title -->
 
-{% block content%} <!-- Content block containing header tag -->
-    <h1>This is the randomizer page</h1>
+
+{% block content%}
+<!-- Content block containing header tag -->
+<h1>Choose your restaurants:</h1>
+<div class="Search">
+    <input id="addResturant" type="text" placeholder="Add Resturant">
+    <button id="addResturantButton">Enter</button>
+</div>
+<div class="main">
+    <div id="innerBox1">
+        <span id="symbole1"></span>
+        <button id="spin1">Spinner</button>
+        <div class="container" id="container1">
+            <svg id="divider1">
+
+            </svg>
+
+        </div>
+    </div>
+    <span id="line"></span>
+    <div id="innerBox2">
+        <button id="spin2">Spinner</button>
+        <span id="symbole"></span>
+        <div class="container" id="container2">
+            <svg id="divider">
+
+            </svg>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    const container1 = document.getElementById("container1");
+    const container2 = document.getElementById("container2");
+    const divider = document.getElementById("divider");
+
+    const addResturant = document.getElementById("addResturant");
+    const addResturantButton = document.getElementById("addResturantButton");
+    const btn1 = document.getElementById("spin1");
+    const btn2 = document.getElementById("spin2");
+    const element = [];
+    const addElement = [];
+
+    let minValue = 1024;
+    let maxValue = 9999;
+    let num = 0;
+    let jsonData = {{ data_dict | tojson }}
+
+    myJson = JSON.parse(jsonData)
+    allName = myJson["business_name"]
+
+
+    for (let i = 0; i < allName.length; i++) {
+        element.push({
+            elementName: allName[i],
+            class: "one",
+            text: allName[i]
+        });
+    }
+
+
+
+
+    const lineCreate = (angle) => {
+        let angleElement = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+
+        //set line point 
+        angleElement.setAttribute('x1', "50%");
+        angleElement.setAttribute('y1', "0");
+        angleElement.setAttribute('x2', "50%");
+        angleElement.setAttribute('y2', "100%");
+
+        angleElement.setAttribute('transform', `rotate(${angle + 20} 175,175)`);
+        angleElement.setAttribute('stroke', '#ffffff');
+        angleElement.setAttribute('stroke-opacity', '0.4');
+        angleElement.setAttribute('stroke-width', '2');
+
+        divider.appendChild(angleElement);
+
+
+    }
+
+    const selectResturantLineCreate = (a) => {
+        console.log(a);
+        const divider1 = document.getElementById("divider1");
+        let angleElement1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        angleElement1.setAttribute('x1', "50%");
+        angleElement1.setAttribute('y1', "0");
+        angleElement1.setAttribute('x2', "50%");
+        angleElement1.setAttribute('y2', "100%");
+
+        angleElement1.setAttribute('transform', `rotate(${a + 20} 175,175)`);
+        angleElement1.setAttribute('stroke', '#ffffff');
+        angleElement1.setAttribute('stroke-opacity', '0.8');
+        angleElement1.setAttribute('stroke-width', '2');
+
+        divider1.appendChild(angleElement1);
+
+    }
+
+    const elementCreate = (text, angle) => {
+
+        const div1 = document.createElement("div");
+        div1.innerText = text;
+        div1.style.transform = `rotate(${angle - 1}deg)`;
+        div1.className = "wheelValue2";
+
+        container2.appendChild(div1);
+        lineCreate(angle);
+    }
+    const getValueFromInput = () => {
+        container1.innerHTML = "";
+        // const svg = document.createElement("svg");
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("id", "divider1");
+        container1.appendChild(svg);
+        let resturantName = addResturant.value;
+        addElement.push(resturantName);
+        let newAngle = 360 / addElement.length;
+
+        addElement.forEach(
+            (item, index) => {
+                // divider1.innerHTML="";
+                const div = document.createElement("div");
+                div.innerText = item;
+                div.style.transform = `rotate(${newAngle * index}deg)`;
+                div.className = "wheelValue1";
+                container1.appendChild(div);
+                selectResturantLineCreate(newAngle * index);
+
+
+            }
+        );
+
+    }
+
+
+
+    const rotationFristWheel = () => {
+        num = num + Math.ceil(Math.random() * ((minValue - maxValue) + maxValue));
+        container1.style.transform = `rotate(${num}deg)`;
+        // getValueFromDiv();
+    }
+    const rotationSecondWheel = () => {
+        num = num + Math.ceil(Math.random() * ((minValue - maxValue) + maxValue));
+        container2.style.transform = `rotate(${num}deg)`;
+        // getValueFromDiv();
+    }
+
+
+
+
+
+    const windowLoad = () => {
+        let angle = 360 / element.length;
+        element.forEach((item, index) => {
+            elementCreate(item.text, angle * index);
+        })
+    }
+
+
+    const start = () => {
+        windowLoad();
+        btn1.onclick = rotationFristWheel;
+        btn2.onclick = rotationSecondWheel;
+        addResturantButton.onclick = getValueFromInput;
+    }
+    window.onload = start;
+
+
+
+</script>
 {% endblock %}

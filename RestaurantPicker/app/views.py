@@ -139,7 +139,20 @@ def questionnaire():
 @views.route('/randomizer')
 @login_required
 def randomizer():
-    return render_template("randomizer.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage))
+        if current_user.is_authenticated:
+            data_dict={
+                "business_name":[],
+            }
+
+            data=Preferences.query.filter_by(user_id=current_user.id,likes=1).all()
+            for d in data:
+                data_dict["business_name"].append(d.business_name[0:20])
+
+            data_dict=json.dumps(data_dict)
+            return render_template("randomizer.html", user=current_user, userImageURL=get_img_url_with_blob_sas_token(current_user.userImage),data_dict=data_dict)
+
+        else:
+            return render_template("login.html")
 
 @views.route('/restaurant/<businessId>', methods=["GET", "POST"]) # Parametrized URL's explained here: https://stackoverflow.com/questions/24892035/how-can-i-get-the-named-parameters-from-a-url-using-flask
 def restaurant(businessId):
