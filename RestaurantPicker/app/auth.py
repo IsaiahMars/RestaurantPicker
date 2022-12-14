@@ -17,7 +17,7 @@ from . import db, mail
 
 auth = Blueprint('auth', __name__)
 
-blob_service = BlobServiceClient.from_connection_string(conn_str="AZURE-CONNECTION-STRING")
+blob_service = BlobServiceClient.from_connection_string(conn_str="connstr")
 
 try:
     container_client = blob_service.get_container_client(container="user-images")  # Connecting to Azure Blob Storage and accessing the container used to store user images
@@ -271,7 +271,7 @@ from datetime import datetime, timedelta
 from azure.storage.blob import ContainerSasPermissions
 
 account_name = "restaurantpicker"
-account_key = "AZURE-KEY"
+account_key = "azurepassword"
 container_name = "user-images"
 
 from azure.storage.blob import generate_blob_sas

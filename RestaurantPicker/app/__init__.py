@@ -7,10 +7,10 @@ from flask_googlemaps import GoogleMaps
 from flask_simple_geoip import SimpleGeoIP
 
 db = SQLAlchemy()                  # Creating the SQLAlchemy class object used to integrate our database into our project
-DB_NAME = 'restaurantpicker'     # Currently, this project requires you to have an existing database hosted locally on your PC.
-DB_ADDRESS = 'localhost'           # You must replace these variables here with the information of said database to establish a connection.
+DB_NAME = 'restaurantpickerdb'     # Currently, this project requires you to have an existing database hosted locally on your PC.
+DB_ADDRESS = '127.0.0.1'           # You must replace these variables here with the information of said database to establish a connection.
 DB_USER = 'root'
-DB_PASSWORD = 'burger12345'
+DB_PASSWORD = 'steamyhams123'
 
 mail = Mail()
 
@@ -33,7 +33,7 @@ def createApp():
     app.config['MAIL_USE_SSL'] = True
     mail.init_app(app)
 
-    app.config['GOOGLEMAPS_KEY'] = "AIzaSyDHUuntBzFTY0Wm3RjPGGLtauZwZRfG9c8"   # Configuring Google Maps API as per documentation requirements, linked below:
+    app.config['GOOGLEMAPS_KEY'] = "AIzaSyAclsyrcDm74sDhtbjy5w5Z94AjcM_Qmvw"   # Configuring Google Maps API as per documentation requirements, linked below:
     map.init_app(app)                                                          # https://pypi.org/project/flask-googlemaps/
 
     app.config['GEOIPIFY_API_KEY'] = "at_AGmMTd4XCvCmns9imq18bbn98QlS3"        # Configuring GeoIPify API as per documentation requirements, linked below: 

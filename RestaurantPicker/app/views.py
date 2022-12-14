@@ -1,10 +1,10 @@
 # This file will be used to create our other routes (randomizer page, map page, etc...)
 import requests, json
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_required
 from flask_googlemaps import Map
 from .auth import get_img_url_with_blob_sas_token
-from .models import Preferences, Reviews, RecentlyViewed
+from .models import Preferences, Reviews, RecentlyViewed, QuestionnaireResponse
 from . import db, simple_geoip
 
 views = Blueprint('views', __name__)

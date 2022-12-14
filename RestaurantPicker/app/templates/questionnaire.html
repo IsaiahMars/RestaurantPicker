@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %} Questionnaire {% endblock%} <!-- Title block containing page title -->
 
 {% block content%} <!-- Content block containing header tag -->
-<body>
+<body onload="boxChecker()">
     <div class="questionnaire-container" >
         <form method="POST" id="questionnaire-form">
             <div class="question-container">
@@ -407,4 +407,13 @@
         border-color:{{ user.primaryColor }}; 
     }
 </style>
+<script>
+    function boxChecker(){
+        var responseList = {{questionnaireResponses|safe}}
+        responseList.forEach(listItem => {
+            var temp = JSON.parse(listItem[1])
+            document.getElementById(temp[0]).checked = true;
+        });
+    }
+</script>
 {% endblock %}
